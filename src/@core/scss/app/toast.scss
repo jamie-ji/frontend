@@ -1,0 +1,43 @@
+// Toastify__toast-icon Toastify--animate-icon Toastify__zoom-enter
+.Toastify__toast-icon {
+  display: none !important;
+}
+
+// .Toastify,.Toastify__toast, .Toastify__toast-theme--light,.Toastify__toast--error{
+//   // &::first-letter{
+//     text-transform: capitalize;
+//   // }
+// }
+
+.toast_component {
+  display: flex;
+  &.align_center {
+    align-items: center;
+  }
+  .icon {
+    width: 25px;
+    height: 25px;
+    color: $white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+  }
+  .content {
+    padding: 0 10px;
+    word-break: break-word;
+    h6 {
+      margin: 0;
+      &::first-letter {
+        text-transform: uppercase;
+      }
+    }
+    p {
+      margin: 0;
+      font-size: 13px;
+      &::first-letter {
+        text-transform: uppercase;
+      }
+    }
+  }
+}

@@ -1,0 +1,59 @@
+.vertical_layout_body {
+  min-height: 100vh;
+  background-color: $white;
+  .content {
+    padding: 20px 30px 20px 30px;
+    border-radius: 25px;
+    // animation-name: appear;
+    // animation-duration: 1s;
+    // animation-iteration-count: 1;
+    // background-color: red;
+  }
+}
+
+@keyframes appear {
+  from {
+    transform: scaleY(0.8);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+.vertical_layout_body_width_max {
+  width: calc(100% - 256px);
+  margin-left: 256px;
+  border-radius: 15px 0 0 15px;
+  background-color: $body-gray;
+  // background: url("../../images/bg/layout.png");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  height: 100vh;
+  overflow-y: auto;
+  z-index: 2;
+  &.vertical_layout_body_width_min {
+    width: calc(100% - 80px);
+    margin-left: 80px;
+  }
+  // filter: drop-shadow(10px 10px 10px black);
+}
+
+.nav_indicator {
+  background: linear-gradient(
+    -45deg,
+    rgba($primaryRgba, 0.8),
+    rgba($primaryRgba, 0.6),
+    rgba($primaryRgba, 0.4),
+    rgba($primaryRgba, 0.2)
+  );
+  height: 20vh;
+  position: fixed;
+  width: 100%;
+  // border: 1px solid blue;
+  z-index: -2;
+  top: 0;
+}
+.body_gray {
+  background-color: $body-gray;
+}

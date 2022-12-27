@@ -1,0 +1,25 @@
+.modal-content {
+  box-shadow: $box-shadow !important;
+  border: none !important;
+  .modal-header {
+    padding: 0.5rem 0.75rem;
+    border: none;
+    box-shadow: $box-shadow !important;
+    .btn-close {
+      box-shadow: $box-shadow !important;
+      background-color: $body-gray !important;
+      position: absolute;
+      right: 0;
+      margin-right: 0px;
+      margin-top: -30px;
+      opacity: 1;
+      font-size: 14px;
+      height: 0.5rem;
+      width: 0.5rem;
+      background-image: url("../../images/icons/close.png");
+    }
+  }
+  .modal-footer {
+    border: none !important;
+  }
+}

@@ -1,0 +1,46 @@
+.welcome_note {
+  // background-image: linear-gradient(rgba($white, 0.5), rgba($white, 0.5)),
+  //   url("../../images/logo/logo.svg");
+  // background-size: 30vh;
+  // background-repeat: no-repeat;
+  // background-position: 98% 95%;
+  border: 1px solid $primary;
+  h4 {
+    margin-bottom: 1rem;
+  }
+  img {
+    width: 100px;
+    object-fit: contain;
+    position: absolute;
+    right: -8px;
+    top: -8px;
+  }
+}
+
+.tracker_title {
+  position: absolute;
+}
+
+.single_value_chart {
+  // position: relative;
+  // left: -2px;
+  // bottom: 0;
+  width: calc(100%);
+}
+.single_value_overlay {
+  // background-color: red;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+}
+
+.arrow_box {
+  padding: 10px;
+}
+
+// .apexcharts-canvas {
+//   width: 100% !important;
+//   #SvgjsSvg1761 {
+//     width: 100% !important;
+//   }
+// }

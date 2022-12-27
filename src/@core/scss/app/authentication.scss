@@ -1,0 +1,99 @@
+.auth_form {
+  background-color: $white;
+  box-shadow: $box-shadow;
+  height: 80vh;
+  // border-radius: 0.25rem;
+  @media only screen and (max-width: 767px) {
+    height: 100vh;
+  }
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  .form_header,
+  .form_field {
+    // background-color: aqua;
+    // padding: 10;
+    width: 90%;
+    text-align: center;
+  }
+  .form_header {
+    margin-bottom: 50px;
+    h3 {
+      font-weight: 600;
+      margin-bottom: 10px;
+      color: $primary;
+    }
+    img {
+      width: 80%;
+      margin-bottom: 10px;
+      object-fit: contain;
+    }
+  }
+  .form_field {
+    text-align: left;
+  }
+  a {
+    color: $primary;
+    text-decoration: none;
+    margin-bottom: 10px;
+    font-size: 0.875rem;
+    outline: none;
+    &:focus {
+      text-decoration: underline;
+    }
+  }
+}
+
+.input_merge {
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  &:focus {
+    &:first-child {
+      display: none !important;
+    }
+  }
+  .input-group-text,
+  .form-control {
+    border: none;
+    color: $text;
+  }
+  .form-control {
+    box-shadow: none !important;
+  }
+  .input-group-text {
+    cursor: pointer;
+  }
+}
+
+.input-group:focus-within {
+  border-color: $primary;
+  background-color: none;
+  box-shadow: $box-shadow;
+}
+.input-group:focus-within *:focus {
+  outline: 0;
+}
+
+.login_form_image_container {
+  // background: url("../../images/bg/bg1.jpg");
+  background-position: center;
+  background-size: cover;
+  height: 100vh;
+  align-items: center;
+}
+.forget_password_form_image_container {
+  // background: url("../../images/bg/bg5.jpg");
+  background-position: center;
+  background-size: cover;
+  height: 100vh;
+  align-items: center;
+}
+.reset_password_form_image_container {
+  // background: url("../../images/bg/bg6.jpg");
+  background-position: center;
+  background-size: cover;
+  height: 100vh;
+  align-items: center;
+}

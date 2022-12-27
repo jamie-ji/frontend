@@ -1,0 +1,16 @@
+.error {
+  background: url("../../images/bg/error.png");
+  height: 100vh;
+  background-repeat: no-repeat;
+  background-size: 70%;
+  background-position: center;
+  background-color: $body-gray;
+}
+.unauthorized {
+  background: url("../../images/bg/unauthorized.png");
+  height: 100vh;
+  background-repeat: no-repeat;
+  background-size: 70%;
+  background-position: center;
+  background-color: $body-gray;
+}

@@ -1,0 +1,13 @@
+.bread_crumb {
+  margin-left: 5px;
+  display: flex;
+  a {
+    color: $primary;
+    font-size: 0.875em;
+    text-decoration: none;
+  }
+  h6 {
+    width: fit-content;
+    margin: 0;
+  }
+}

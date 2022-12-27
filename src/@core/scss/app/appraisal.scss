@@ -1,0 +1,21 @@
+.single_choice,
+.multi_choice {
+  border: $border;
+  border-radius: 0.25rem;
+  padding: 10px;
+  &::first-letter {
+    text-transform: capitalize;
+  }
+}
+.multi_choice {
+  .multi_choice_content {
+    display: flex;
+    p {
+      margin: 0;
+      margin-left: 5px;
+      &::first-letter {
+        text-transform: capitalize;
+      }
+    }
+  }
+}
