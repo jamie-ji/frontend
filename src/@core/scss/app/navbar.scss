@@ -3,6 +3,7 @@
   justify-content: space-between;
   box-shadow: $box-shadow;
   padding: 10px 20px;
+  background: white;
 
   .navbar_content {
     // background-color: $white;
@@ -10,7 +11,7 @@
     width: fit-content;
     display: flex;
     // border-radius: 2px;
-    display: flex;
+
     .btn-icon {
       margin-right: 5px;
       &:last-child {
@@ -38,4 +39,29 @@
 }
 span:hover {
   color: $primary;
+}
+.sidebar {
+  position: fixed;
+  right: -500px;
+  height: 100%;
+  width: 500px;
+  background-color: white;
+  box-shadow: $box-shadow;
+  z-index: 999;
+  transition: 0.25s linear;
+  &.show {
+    right: 0px;
+  }
+}
+
+.sidebar-overlay {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: rgba($color: #000000, $alpha: 0.3);
+  z-index: 998;
+  right: 100%;
+  &.show {
+    right: 0px;
+  }
 }

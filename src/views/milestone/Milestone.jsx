@@ -1,31 +1,23 @@
-import { assertExpressionStatement } from "@babel/types";
 import axios from "axios";
 import React, { Fragment, useState } from "react";
-import { GrDocumentText } from "react-icons/gr";
 
-import { Link } from "react-router-dom";
 import Select from "react-select";
-import { AsyncPaginate } from "react-select-async-paginate";
 import {
-  Badge,
-  Button,
   Card,
-  CardBody,
-  CardFooter,
   CardHeader,
   CardTitle,
   Col,
   Input,
   Label,
-  List,
   Row,
   Spinner,
   Table,
 } from "reactstrap";
 import RippleButton from "../../@components/ripple-button/index";
 import Sidebar from "../../@components/sidebar";
-import wave, { clearEffect } from "wave-effect";
 import "wave-effect/dist/wave.css";
+import { forEveryKeyLoop } from "../../@components/loops";
+import { CustomOption } from "../../@components/data-manager";
 
 function Milestone() {
   const [selectedFile, setSelectedFile] = useState([]),
@@ -33,57 +25,68 @@ function Milestone() {
     [loading, setLoading] = useState(false),
     [selectedRows, setSelectedRows] = useState([]),
     [tester, setTester] = useState([]),
-    [list, setList] = useState([]),
-    [open, setOpen] = useState(false);
-  const debugMode = true;
+    [list] = useState([]),
+    [open, setOpen] = useState(false),
+    [show, setShow] = useState(false);
+
   const baseUrl = "http://192.168.18.147:7000";
   const allAuthors = selectedFile.map((i) => i.author);
   const authors = [...new Set(allAuthors)].map((i) => ({ label: i }));
+
   const handleSelectCheck = (e, id) => {
-    // console.log("id", id);
     const checked = e.target.checked;
     if (checked) {
       setSelectedRows([...selectedRows, id]);
       setTester([...tester, tester]);
     } else {
-      // selectedRows.splice(selectedRows.indexOf(id), 1);
-      // setTester([...tester, tester]);
-
       setSelectedRows(selectedRows.filter((i) => i !== id));
     }
   };
-  const handleSelect = (e, name) => {
-    setValues({ ...values, [name]: e });
+  const handleSelect = (prop) => (e) => {
+    setValues({ ...values, [prop]: e });
   };
   const fileHandleChange = (event, id) => {
+    setLoading(true);
     console.log("id", id);
     if (event.target.files.length > 0) {
       const allFiles = event.target.files;
       for (let i = 0; i < allFiles.length; i++) {
-        const newId = `file-${id}`;
-        const newArray = selectedFile;
         let form_data = new FormData();
         form_data.append("file", allFiles[i]);
-        // form_data.append("folder", "CommentFiles");
-
         axios
           .post(`${baseUrl}/documentchecker/`, form_data)
           .then((res) => {
             console.log("New Data", res.data.path);
-
-            // setSelectedFile([...selectedFile, res.data]);
             setSelectedFile((c) => c.concat(res.data));
+            setSelectedRows((c) => c.concat(res.data.id));
+            setLoading(false);
+            setShow(true);
           })
-          .catch(() => {
+          .catch((e) => {
+            forEveryKeyLoop(e.response.data);
+            setLoading(false);
+            // setShow(false);
             // ** setBlocking(false);
           });
       }
-    } else {
-      console.log("");
     }
-  };
-  console.log("selectedFile", selectedFile);
 
+    let reader = new FileReader();
+    reader.readAsDataURL(event.target.files[0]);
+    reader.onload = (e) => {
+      console.log({
+        data: reader.result.split(",").pop(),
+        fileName: event.target.files[0].name,
+      });
+    };
+  };
+  const handleSubmit = () => {
+    setLoading(true);
+    alert("Hello");
+  };
+  // **useEffect(() => {
+  //   handleList();
+  // }, []);
   return (
     <Fragment>
       <Sidebar isOpen={open} setIsOpen={setOpen} />
@@ -100,13 +103,20 @@ function Milestone() {
             <div className="d-flex">
               <div style={{ width: "200px" }}>
                 {/* to be change */}
-                <Select options={authors} placeholder="Select Author" />
+                <Select
+                  options={authors}
+                  value={values.authors}
+                  onChange={handleSelect("author")}
+                  placeholder="Select Author"
+                  components={{ Option: CustomOption }}
+                  // theme={theme}
+                />
               </div>
               <div className="d-flex flex-wrap ">
                 <RippleButton>
                   <Label for="fusk" className="label-size">
                     {" "}
-                    Upload
+                    Upload {loading && <Spinner size="sm" />}
                   </Label>
                 </RippleButton>
                 <input
@@ -118,14 +128,6 @@ function Milestone() {
                   style={{ display: "none" }}
                   onChange={(e) => fileHandleChange(e)}
                 />
-                {/* {selectedFile
-                  ? selectedFile.map((file, fileInd) => {
-                      const fileName = file.file;
-                      // const splittedFileName = fileName.split(".");
-                      // const fileExtension = splittedFileName.slice(-1)[0];
-                      setList(file);
-                    })
-                  : ""} */}
               </div>
             </div>
           </CardHeader>
@@ -143,26 +145,19 @@ function Milestone() {
                   </thead>
                   <tbody>
                     {selectedFile.map((item, index) => (
-                      // const fileName = item.file;
-                      // const splittedFileName = fileName.split("/");
-                      // const fileExtension = splittedFileName.slice(-1)[0];
-
-                      // return (
                       <tr key={index}>
                         <td>
                           <Input
                             id={`full_url-${item.id}-${index}`}
                             checked={selectedRows.includes(item.id)}
-                            onChange={(e) =>
-                              handleSelectCheck(e, item.id, "file-full_url")
-                            }
+                            onChange={(e) => handleSelectCheck(e, item.id)}
                             type="checkbox"
                             inline
                           />
                         </td>
                         <td
                           className="cursor-pointer text-nowrap"
-                          onClick={() => setOpen(!open)}
+                          // onClick={() => setOpen(!open)}
                         >
                           <span>{item.path}</span>
                         </td>
@@ -171,10 +166,13 @@ function Milestone() {
                   </tbody>
                 </Table>
               </div>
+
               <div style={{ margin: "0.25rem" }}>
-                <RippleButton onClick={(e) => fileHandleChange(e)}>
-                  Submit {loading && <Spinner size="sm" />}
-                </RippleButton>
+                {show && (
+                  <RippleButton onClick={() => handleSubmit()}>
+                    Submit
+                  </RippleButton>
+                )}
               </div>
             </Col>
           </Row>
@@ -183,21 +181,28 @@ function Milestone() {
           <Table responsive style={{ marginTop: "1rem" }}>
             <thead>
               <tr>
-                <th>Id</th>
-                <th>Title</th>
-                <th>Text</th>
+                <th>Year</th>
+                <th>Files</th>
+                <th>Word count </th>
+                <th>Status</th>
               </tr>
             </thead>
             <tbody>
               {list.map((item, index) => (
                 <tr key={index}>
-                  <td>{item.id}</td>
-                  <td>{item.title} </td>
-                  <td>{item.cards[0].text}</td>
+                  <td>{item.year}</td>
+                  <td>{item.file} </td>
+                  <td>{item.words_count}</td>
+                  <td>{item.status}</td>
                 </tr>
               ))}
             </tbody>
           </Table>
+          {/* <Pagination
+            pages={list}
+            action={handleList}
+            // disabled={blocking}
+          /> */}
         </Card>
         <br />
       </div>

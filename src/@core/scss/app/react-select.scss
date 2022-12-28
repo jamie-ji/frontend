@@ -8,12 +8,6 @@
 .css-1okebmr-indicatorSeparator {
   background: none !important;
 }
-// .css-1s2u09g-control,
-// .css-319lph-ValueContainer,
-// .css-1hb7zxy-IndicatorsContainer,
-// .css-tlfecz-indicatorContainer {
-//   height: 35px !important;
-// }
 
 .select_option {
   &:hover {
@@ -35,27 +29,6 @@
   .css-1s2u09g-control {
     border-color: $danger !important;
   }
-}
-
-.css-1pahdxg-control {
-  border: 1px solid $primary;
-  box-shadow: $box-shadow !important;
-  &:hover {
-    border: 1px solid $primary;
-  }
-}
-.css-1okebmr-indicatorSeparator {
-  background: none !important;
-}
-
-.select_option {
-  &:hover {
-    background-color: rgba($primaryRgba, $alpha: 0.1);
-  }
-}
-
-.css-qc6sy-singleValue {
-  color: $text !important;
 }
 
 .css-9gakcf-option {

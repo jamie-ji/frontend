@@ -2,36 +2,10 @@
   color: $primary;
 }
 
-.dropdown-item.active {
-  background-color: $primary;
-}
-.border-primary {
-  border: 3px solid $danger !important;
-}
-.dropdown-item {
-  color: $text;
-  &:active {
-    background-color: $primary;
-    color: $white !important;
-  }
-  &:hover {
-    background: rgba($primaryRgba, 0.2);
-    color: $primary;
-  }
-  &:focus {
-    background: rgba($primaryRgba, 1) !important;
-    color: $white !important;
-  }
-}
-
-.dropdown-menu {
-  box-shadow: $box-shadow;
-  border: none !important;
-}
-
 .card {
   border: none;
   border-radius: 0.5rem !important;
+  box-shadow: $box-shadow;
   .card-header {
     &:first-child {
       border-radius: 0.5rem !important;
@@ -88,10 +62,6 @@
   background-color: white !important;
 }
 
-.card {
-  box-shadow: $box-shadow;
-}
-
 .spinner-border-sm {
   border-width: 3px;
   // width: 1.1rem;
@@ -128,10 +98,6 @@
 
 .position-abs {
   position: absolute;
-}
-
-.text-danger {
-  color: $danger !important;
 }
 
 .pb-0 {

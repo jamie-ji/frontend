@@ -75,10 +75,9 @@
     box-shadow: $custom-shadow rgba($color: $primaryRgba, $alpha: 0.3) !important;
   }
   &.checked {
-    background-image: url("../../images/icons/check.png") !important;
     background-position: center !important;
     background-size: cover !important;
-    background-color: $appPrimary !important;
+    background-color: red !important;
     border-color: $primary;
   }
 }
