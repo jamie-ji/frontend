@@ -13,13 +13,13 @@ import {
   Spinner,
   Table,
 } from "reactstrap";
-import RippleButton from "../../@components/ripple-button/index";
-import Sidebar from "../../@components/sidebar";
+import RippleButton from "../@components/ripple-button/index";
+import Sidebar from "../@components/sidebar";
 import "wave-effect/dist/wave.css";
-import { forEveryKeyLoop } from "../../@components/loops";
-import { CustomOption } from "../../@components/data-manager";
+import { forEveryKeyLoop } from "../@components/loops";
+import { CustomOption } from "../@components/data-manager";
 
-function Milestone() {
+function FileTable() {
   const [selectedFile, setSelectedFile] = useState([]),
     [values, setValues] = useState(""),
     [loading, setLoading] = useState(false),
@@ -91,9 +91,6 @@ function Milestone() {
     <Fragment>
       <Sidebar isOpen={open} setIsOpen={setOpen} />
       <div className="container">
-        <div className="navbar_container">
-          <h5>Milestone</h5>
-        </div>
         {/* <button onClick={() => setOpen(!open)}>open</button> */}
         {/* {checkList.map((item, index) => ( */}
         <Card className="my-3">
@@ -215,4 +212,4 @@ function Milestone() {
   );
 }
 
-export default Milestone;
+export default FileTable;

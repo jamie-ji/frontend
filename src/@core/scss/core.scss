@@ -16,20 +16,21 @@
 @import "./app/toast.scss";
 @import "./app/table.scss";
 @import "./app/buttons.scss";
+@import "./app/app.scss";
 
 @import "./app/ripple.scss";
+@import "./app/divider.scss";
 @import "./bootstrap/bootstrap-extended.scss";
 
 body {
   margin: 0;
   font-family: "Work Sans", sans-serif;
   background-color: #f5f5f7;
-
-  color: $text !important;
+  color: $text;
 }
-p {
-  text-align: justify;
-}
+// p {
+//   text-align: justify;
+// }
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
@@ -233,7 +234,12 @@ code {
   box-shadow: none !important;
 }
 .form-check-input:checked {
+  background-image: url("../images/check.png") !important;
   background-color: $appPrimary;
+  border-color: $appPrimary;
+  box-shadow: $box-shadow;
+}
+.form-check-input:focus {
   border-color: $appPrimary;
   box-shadow: $box-shadow;
 }
