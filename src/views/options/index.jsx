@@ -1,6 +1,7 @@
 import React, { Fragment } from "react";
 import { Button, Card, CardBody, Col, Row } from "reactstrap";
 import { useNavigate } from "react-router-dom";
+import RippleButton from "../../@components/ripple-button/index";
 
 export default function Options() {
   const navigate = useNavigate();
@@ -16,12 +17,12 @@ export default function Options() {
                 <Col md="3"></Col>
 
                 <Col md="6">
-                  <Button
+                  <RippleButton
                     className="w-100"
                     onClick={() => navigate("/upload-files")}
                   >
                     Upload Files
-                  </Button>
+                  </RippleButton>
                 </Col>
                 <Col md="3"></Col>
                 <Col md="2"></Col>
@@ -35,7 +36,7 @@ export default function Options() {
 
                 <Col md="3"></Col>
                 <Col md="6">
-                  <Button className="w-100">View Similarity</Button>
+                  <RippleButton className="w-100">View Similarity</RippleButton>
                 </Col>
 
                 <Col md="3"></Col>

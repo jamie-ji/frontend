@@ -31,13 +31,13 @@ const baseStyle = {
 };
 
 const activeStyle = {
-  borderColor: "red",
-  color: "red",
+  borderColor: "#066",
+  color: "#066",
 };
 
 const acceptStyle = {
-  borderColor: "red",
-  color: "red",
+  borderColor: "#066",
+  color: "#066",
 };
 
 const rejectStyle = {
