@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { Fragment, useState, useEffect } from "react";
 import {
   Alert,
+  Badge,
   Button,
   Card,
   CardBody,
@@ -30,6 +31,7 @@ import {
 } from "../../@components/date-management";
 import { Info } from "react-feather";
 import toastify from "../../@components/toastify";
+import Sidebar from "../../@components/sidebar";
 export default function UploadFiles() {
   const navigate = useNavigate();
   const [modal, setModal] = useState(false),
@@ -38,6 +40,11 @@ export default function UploadFiles() {
     [progress, setProgress] = useState(false),
     [allFiles, setAllFiles] = useState([]),
     [author, setAuthor] = useState(""),
+    [open, setOpen] = useState(false),
+    [taskId, setTaskId] = useState(""),
+    [taskIdBoolean, setTaskIdBoolean] = useState(false),
+    [progressBar, setProgressBar] = useState(100),
+    [list, setList] = useState([]),
     [selectedFiles, setSelectedFiles] = useState([]);
   const allAuthors = allFiles.map((i) => i.author);
   const authors = [...new Set(allAuthors)].map((i) => ({ label: i }));
@@ -82,6 +89,14 @@ export default function UploadFiles() {
       setSpinner(false);
     }
   };
+  const getThrushhold = (id) => {
+    axios
+      .get(`${baseUrl}/documentchecker/task/${id ? id : taskId}/`)
+      .then((res) => {
+        setList(res.data);
+      });
+  };
+  console.log("list", list);
   const processHandler = () => {
     if (!author) {
       toastify("error", Info, "Select Author");
@@ -95,6 +110,9 @@ export default function UploadFiles() {
         .then((res) => {
           setProgress(true);
           setSpinner(true);
+          setTaskId(res.data.task_id);
+          setTaskIdBoolean(true);
+          getThrushhold(res.data.task_id);
         })
         .catch((e) => {
           setProgress(false);
@@ -102,8 +120,14 @@ export default function UploadFiles() {
         });
     }
   };
+  useEffect(() => {
+    if (taskId && taskIdBoolean) {
+      getThrushhold();
+    }
+  }, []);
   return (
     <Fragment>
+      <Sidebar isOpen={open} setIsOpen={setOpen} />
       <Modal isOpen={modal} centered toggle={() => setModal(false)}>
         <div className="upload-file-modal">
           {spinner ? (
@@ -149,6 +173,7 @@ export default function UploadFiles() {
                     <th>File</th>
                     <th>Author</th>
                     <th>Created at</th>
+                    <th></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -168,9 +193,26 @@ export default function UploadFiles() {
                           id={item.id}
                         />
                       </td>
-                      <td>{item.path ? item.path.split("/")[1] : ""}</td>
+                      <td>
+                        <img
+                          src={require("../../@core/images/word.png")}
+                          style={{
+                            height: "20px",
+                            objectFit: "contain",
+                          }}
+                          alt=""
+                        />
+                        {item.path ? item.path.split("/")[1] : ""}
+                      </td>
                       <td>{item.author ? item.author : "---"}</td>
                       <td>{dateFunction(item.created_at)}</td>
+                      <td
+                        onClick={() => setOpen(!open)}
+                        className="cursor-pointer text-nowrap edit-class"
+                      >
+                        {" "}
+                        <small>View</small>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -206,9 +248,9 @@ export default function UploadFiles() {
                     animated
                     striped
                     color="primary"
-                    value={50}
+                    value={100}
                   >
-                    50%
+                    100%
                   </Progress>
                 </Fragment>
               )}
@@ -222,34 +264,46 @@ export default function UploadFiles() {
           </Card>
         )}
         <br />
-        <Card>
-          <Table className="mb-0">
-            <thead>
-              <tr>
-                <th>File</th>
-                <th>Word count</th>
-                <th>Created at</th>
-              </tr>
-            </thead>
-            <tbody>
-              {allFiles.map((item, index) => (
-                <tr
-                  key={index}
-                  className={classNames({
-                    "bg-gray-nt": author && item.author !== author,
-                  })}
-                >
-                  <td>{item.path ? item.path.split("/")[1] : ""}</td>
-                  <td>{item.word_count ? item.word_count : "---"}</td>
-                  <td>{item.author ? item.author : "---"}</td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-        </Card>
-        <div className="text-center my-2">
-          <RippleButton>Upload</RippleButton>
-        </div>
+        {progress && (
+          <Fragment>
+            <Card>
+              <Table className="mb-0">
+                <thead>
+                  <tr>
+                    <th>Year</th>
+                    <th>Files</th>
+                    <th>Word count</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {/* {list.length && */}
+                  {/* // list÷.map((item, index) => ( */}
+                  <tr>
+                    <td>
+                      {list && list.year_info ? list.year_info.year : "---"}
+                    </td>
+                    <td>
+                      {list && list.year_info
+                        ? list.year_info.file_count
+                        : "---"}
+                    </td>
+                    <td>
+                      {list && list.year_info
+                        ? list.year_info.word_count
+                        : "---"}
+                    </td>
+                  </tr>
+                  {/* ))} */}
+                </tbody>
+              </Table>
+            </Card>
+            {progressBar === 100 && (
+              <div className="text-center mt-2">
+                <RippleButton>Upload</RippleButton>
+              </div>
+            )}
+          </Fragment>
+        )}
       </div>
     </Fragment>
   );
