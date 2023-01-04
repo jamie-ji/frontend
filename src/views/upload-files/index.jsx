@@ -2,12 +2,10 @@ import axios from "axios";
 import React, { Fragment, useState, useEffect } from "react";
 import {
   Alert,
-  Badge,
   Button,
   Card,
   CardBody,
   CardFooter,
-  CardTitle,
   Input,
   Modal,
   ModalFooter,
@@ -20,20 +18,16 @@ import DragAndDrop from "./DragAndDrop";
 import { baseUrl } from "../../@components/constants";
 import { RiAddFill } from "react-icons/ri";
 import Select from "react-select";
-import { useNavigate } from "react-router-dom";
+
 import { CustomOption } from "../../@components/data-manager";
 import { forEveryKeyLoop } from "../../@components/loops";
 import classNames from "classnames";
-import RippleButton from "../../@components/ripple-button/index";
-import {
-  dateAndTimeFunction,
-  dateFunction,
-} from "../../@components/date-management";
+
+import { dateFunction } from "../../@components/date-management";
 import { Info } from "react-feather";
 import toastify from "../../@components/toastify";
 import Sidebar from "../../@components/sidebar";
 export default function UploadFiles() {
-  const navigate = useNavigate();
   const [modal, setModal] = useState(false),
     [spinner, setSpinner] = useState(false),
     [added, setAdded] = useState(false),
@@ -43,15 +37,23 @@ export default function UploadFiles() {
     [open, setOpen] = useState(false),
     [taskId, setTaskId] = useState(""),
     [taskIdBoolean, setTaskIdBoolean] = useState(false),
-    [progressBar, setProgressBar] = useState(100),
-    [list, setList] = useState([]),
+    [list, setList] = useState(""),
+    [processList, setProcessList] = useState(""),
     [selectedFiles, setSelectedFiles] = useState([]);
   const allAuthors = allFiles.map((i) => i.author);
   const authors = [...new Set(allAuthors)].map((i) => ({ label: i }));
   useEffect(() => {
     setModal(true);
   }, []);
-
+  const completedColor = (arg) => {
+    if (arg >= 0 && arg <= 50) {
+      return "warning";
+    } else if (arg >= 51 && arg <= 80) {
+      return "info";
+    } else if (arg >= 81 && arg >= 100) {
+      return "success";
+    }
+  };
   const uploadFileHandler = (file) => {
     setSpinner(true);
     setModal(true);
@@ -60,7 +62,6 @@ export default function UploadFiles() {
     axios
       .post(`${baseUrl}/documentchecker/`, form_data)
       .then((res) => {
-        console.log(res);
         setAllFiles((c) => c.concat(res.data));
         setSelectedFiles((c) => c.concat(res.data.id));
         setAdded(true);
@@ -72,7 +73,7 @@ export default function UploadFiles() {
           forEveryKeyLoop(e.response.data);
         }
         setAdded(true);
-        console.log(e);
+
         setSpinner(false);
         setModal(false);
       });
@@ -94,9 +95,10 @@ export default function UploadFiles() {
       .get(`${baseUrl}/documentchecker/task/${id ? id : taskId}/`)
       .then((res) => {
         setList(res.data);
+        getProgress(id);
       });
   };
-  console.log("list", list);
+
   const processHandler = () => {
     if (!author) {
       toastify("error", Info, "Select Author");
@@ -113,18 +115,52 @@ export default function UploadFiles() {
           setTaskId(res.data.task_id);
           setTaskIdBoolean(true);
           getThrushhold(res.data.task_id);
+          // getProgress(res.data.task_id);
         })
         .catch((e) => {
           setProgress(false);
+
           setSpinner(false);
         });
     }
   };
+
+  const getProgress = (id) => {
+    axios
+      .get(`${baseUrl}/documentchecker/progress/${id ? id : taskId}/`)
+      .then((res) => {
+        setProcessList(res.data);
+      });
+  };
+  const completPercentage = () => {
+    const authFilterList = allFiles.filter((i) => i.author === author);
+    const fileCount = authFilterList.length;
+    const result = (processList.completed_file * 100) / fileCount;
+
+    return {
+      result: parseFloat(result ? result : 0).toFixed(2),
+      fileCount,
+    };
+  };
+  const completedFiles = completPercentage();
   useEffect(() => {
-    if (taskId && taskIdBoolean) {
-      getThrushhold();
+    if (progress && taskId && taskIdBoolean) {
+      const interval = setInterval(() => {
+        getProgress();
+      }, 1000 * 5);
+      return () => clearInterval(interval);
     }
-  }, []);
+  }, [taskIdBoolean]);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (processList.complete === true) {
+        setTaskIdBoolean(false);
+        setProgress(false);
+        setSpinner(false);
+      }
+    }, 1000 * 1);
+    return () => clearInterval(interval);
+  }, [processList.complete]);
   return (
     <Fragment>
       <Sidebar isOpen={open} setIsOpen={setOpen} />
@@ -141,10 +177,7 @@ export default function UploadFiles() {
           )}
         </div>
         <ModalFooter>
-          <Button
-            color="primary"
-            onClick={() => (added ? setModal(false) : navigate("/files"))}
-          >
+          <Button color="primary" onClick={() => setModal(false)}>
             Cancel
           </Button>
         </ModalFooter>
@@ -158,7 +191,11 @@ export default function UploadFiles() {
                   <Select
                     options={authors}
                     value={{ label: author ? author : "Select author" }}
-                    onChange={(e) => setAuthor(e.label)}
+                    onChange={(e) => {
+                      setAuthor(e.label);
+                      setProgress(false);
+                      setSpinner(false);
+                    }}
                     placeholder="Select Author"
                     components={{ Option: CustomOption }}
 
@@ -173,7 +210,7 @@ export default function UploadFiles() {
                     <th>File</th>
                     <th>Author</th>
                     <th>Created at</th>
-                    <th></th>
+                    {/* <th></th> */}
                   </tr>
                 </thead>
                 <tbody>
@@ -202,17 +239,17 @@ export default function UploadFiles() {
                           }}
                           alt=""
                         />
-                        {item.path ? item.path.split("/")[1] : ""}
+                        {item.file_name ? item.file_name.split("/")[1] : ""}
                       </td>
                       <td>{item.author ? item.author : "---"}</td>
                       <td>{dateFunction(item.created_at)}</td>
-                      <td
+                      {/* <td
                         onClick={() => setOpen(!open)}
                         className="cursor-pointer text-nowrap edit-class"
                       >
                         {" "}
                         <small>View</small>
-                      </td>
+                      </td> */}
                     </tr>
                   ))}
                 </tbody>
@@ -240,17 +277,54 @@ export default function UploadFiles() {
                   </div>
                 </div>
               </CardFooter>
-              {progress && (
+              {list && (
                 <Fragment>
                   <div className="text-center">Progress</div>
                   <Progress
-                    className="m-4"
+                    className="m-2"
                     animated
                     striped
-                    color="primary"
-                    value={100}
+                    color={completedColor(
+                      processList.progress ? processList.progress : 0
+                    )}
+                    value={processList.progress ? processList.progress : 0}
                   >
-                    100%
+                    {processList.progress ? processList.progress : 0}%
+                  </Progress>
+                  <Table className="mb-0">
+                    <thead>
+                      <tr>
+                        <th>Year</th>
+                        <th>Files</th>
+                        <th>Word count</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {list.year_info &&
+                        list.year_info.map((item, index) => (
+                          <tr key={index}>
+                            <td>{item ? item.year : "---"}</td>
+                            <td>{item ? item.file_count : "---"}</td>
+                            <td>{item ? item.word_count : "---"}</td>
+                          </tr>
+                        ))}
+                    </tbody>
+                  </Table>
+                  <br />
+                  <div className="text-center mt-2">
+                    Files Completed{" "}
+                    <small>
+                      ({processList.completed_file}/{processList.threshold})
+                    </small>
+                  </div>
+                  <Progress
+                    className="m-2"
+                    animated
+                    striped
+                    color={completedColor(completedFiles.result)}
+                    value={completedFiles.result}
+                  >
+                    {completedFiles.result}%
                   </Progress>
                 </Fragment>
               )}
@@ -260,50 +334,22 @@ export default function UploadFiles() {
           <Card>
             <CardBody>
               <Alert color="danger">No file</Alert>
+
+              <Button
+                color="primary"
+                onClick={() => {
+                  setModal(true);
+                  setProgress(false);
+                  setSpinner(false);
+                }}
+              >
+                <RiAddFill /> Upload files
+              </Button>
             </CardBody>
           </Card>
         )}
         <br />
-        {progress && (
-          <Fragment>
-            <Card>
-              <Table className="mb-0">
-                <thead>
-                  <tr>
-                    <th>Year</th>
-                    <th>Files</th>
-                    <th>Word count</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {/* {list.length && */}
-                  {/* // list÷.map((item, index) => ( */}
-                  <tr>
-                    <td>
-                      {list && list.year_info ? list.year_info.year : "---"}
-                    </td>
-                    <td>
-                      {list && list.year_info
-                        ? list.year_info.file_count
-                        : "---"}
-                    </td>
-                    <td>
-                      {list && list.year_info
-                        ? list.year_info.word_count
-                        : "---"}
-                    </td>
-                  </tr>
-                  {/* ))} */}
-                </tbody>
-              </Table>
-            </Card>
-            {progressBar === 100 && (
-              <div className="text-center mt-2">
-                <RippleButton>Upload</RippleButton>
-              </div>
-            )}
-          </Fragment>
-        )}
+        <Fragment></Fragment>
       </div>
     </Fragment>
   );

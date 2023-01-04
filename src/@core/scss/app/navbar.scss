@@ -42,6 +42,7 @@ span:hover {
 }
 .sidebar {
   position: fixed;
+  top: 0;
   right: -500px;
   height: 100%;
   width: 500px;
@@ -56,6 +57,7 @@ span:hover {
 
 .sidebar-overlay {
   position: fixed;
+  top: 0;
   width: 100%;
   height: 100%;
   background: rgba($color: #000000, $alpha: 0.3);

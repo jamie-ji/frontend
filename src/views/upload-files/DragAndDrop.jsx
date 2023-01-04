@@ -1,17 +1,10 @@
-import React, {
-  Fragment,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import React, { Fragment, useCallback, useMemo } from "react";
 import { useDropzone } from "react-dropzone";
 import { AiOutlineInfoCircle } from "react-icons/ai";
 
 import { RiDragDropLine } from "react-icons/ri";
-import { Button } from "reactstrap";
+
 import toastify from "../../@components/toastify";
-// import axios from "axios";
 
 const baseStyle = {
   display: "flex",
@@ -23,7 +16,7 @@ const baseStyle = {
   borderColor: "gray",
   borderStyle: "dashed",
   background: "rgba(255,255,255,0)",
-  color: "#066",
+  color: "#185db8",
   transition: ".25s ease-in-out",
   outline: "none",
   width: "100%",
@@ -31,13 +24,13 @@ const baseStyle = {
 };
 
 const activeStyle = {
-  borderColor: "#066",
-  color: "#066",
+  borderColor: "#185db8",
+  color: "#185db8",
 };
 
 const acceptStyle = {
-  borderColor: "#066",
-  color: "#066",
+  borderColor: "#185db8",
+  color: "#185db8",
 };
 
 const rejectStyle = {
