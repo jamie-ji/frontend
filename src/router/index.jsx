@@ -22,7 +22,7 @@ function Router() {
         // position={"top-center"}
       />
       <div className="navbar_container">
-        <h5>Milestone</h5>
+        <h5>Similarities</h5>
       </div>
       <BrowserRouter basename="/app">
         <Routes>

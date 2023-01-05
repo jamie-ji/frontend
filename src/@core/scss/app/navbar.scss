@@ -4,6 +4,9 @@
   box-shadow: $box-shadow;
   padding: 10px 20px;
   background: white;
+  position: sticky;
+  top: 0;
+  z-index: 99;
 
   .navbar_content {
     // background-color: $white;

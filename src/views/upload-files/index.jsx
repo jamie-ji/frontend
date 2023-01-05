@@ -24,12 +24,14 @@ import { forEveryKeyLoop } from "../../@components/loops";
 import classNames from "classnames";
 
 import { dateFunction } from "../../@components/date-management";
-import { Info } from "react-feather";
+import { Check, CheckCircle, Info, XCircle } from "react-feather";
 import toastify from "../../@components/toastify";
 import Sidebar from "../../@components/sidebar";
+import DragAndDropView from "./DragAndDropView";
 export default function UploadFiles() {
   const [modal, setModal] = useState(false),
     [spinner, setSpinner] = useState(false),
+    [completeSpinner, setCompleteSpinner] = useState(false),
     [added, setAdded] = useState(false),
     [progress, setProgress] = useState(false),
     [allFiles, setAllFiles] = useState([]),
@@ -78,6 +80,21 @@ export default function UploadFiles() {
         setModal(false);
       });
   };
+  // const checkIconHandler = () => {
+  const checkHandler = () => {
+    let files = [];
+    if (list.year_info) {
+      for (let i = 0; i < list.year_info.length; i++) {
+        files.push(...list.year_info[i].file_ids);
+      }
+      // const checkList = list.year_info.map((i) => i.file_ids);
+      return files;
+    } else {
+      return null;
+    }
+  };
+  const checked = checkHandler();
+  // };
 
   const selectFileHandler = (e, id) => {
     if (!e.target.checked) {
@@ -98,7 +115,7 @@ export default function UploadFiles() {
         getProgress(id);
       });
   };
-
+  //**process button api */
   const processHandler = () => {
     if (!author) {
       toastify("error", Info, "Select Author");
@@ -118,13 +135,14 @@ export default function UploadFiles() {
           // getProgress(res.data.task_id);
         })
         .catch((e) => {
+          forEveryKeyLoop(e.response.data);
           setProgress(false);
 
           setSpinner(false);
         });
     }
   };
-
+  //** */ Complete Bar data api
   const getProgress = (id) => {
     axios
       .get(`${baseUrl}/documentchecker/progress/${id ? id : taskId}/`)
@@ -135,13 +153,31 @@ export default function UploadFiles() {
   const completPercentage = () => {
     const authFilterList = allFiles.filter((i) => i.author === author);
     const fileCount = authFilterList.length;
-    const result = (processList.completed_file * 100) / fileCount;
+    const result = (processList.completed_file * 100) / processList.threshold;
 
     return {
       result: parseFloat(result ? result : 0).toFixed(2),
       fileCount,
     };
   };
+  //**complete button api */
+  const completeBtnHandler = (id) => {
+    setCompleteSpinner(true);
+    const data = {
+      complete: true,
+    };
+    axios
+      .patch(`${baseUrl}/documentchecker/complete/${id ? id : taskId}/`, data)
+      .then((res) => {
+        setCompleteSpinner(false);
+        toastify("success", CheckCircle, "Successfully Completed");
+      })
+      .catch((res) => {
+        setCompleteSpinner(false);
+      });
+  };
+
+  // console.log("checksHandler", checksHandler);
   const completedFiles = completPercentage();
   useEffect(() => {
     if (progress && taskId && taskIdBoolean) {
@@ -151,6 +187,14 @@ export default function UploadFiles() {
       return () => clearInterval(interval);
     }
   }, [taskIdBoolean]);
+  useEffect(() => {
+    if (processList.status !== "Complete" && taskId) {
+      const interval = setInterval(() => {
+        getThrushhold();
+      }, 1000 * 5);
+      return () => clearInterval(interval);
+    }
+  }, [processList.status]);
 
   return (
     <Fragment>
@@ -173,7 +217,8 @@ export default function UploadFiles() {
           </Button>
         </ModalFooter>
       </Modal>
-      <div className="container my-5">
+      {/* <DragAndDropView uploadFileHandler={uploadFileHandler}> */}
+      <div className="container my-5" onMouseDown={() => console.log("mouse")}>
         {allFiles.length ? (
           <Fragment>
             <Card>
@@ -198,6 +243,7 @@ export default function UploadFiles() {
                 <thead>
                   <tr>
                     <th></th>
+                    <th></th>
                     <th>File</th>
                     <th>Author</th>
                     <th>Created at</th>
@@ -220,6 +266,17 @@ export default function UploadFiles() {
                           checked={selectedFiles.includes(item.id)}
                           id={item.id}
                         />
+                      </td>
+                      <td>
+                        {item.author === author && checked && (
+                          <span>
+                            {checked.includes(item.id) ? (
+                              <CheckCircle className="text-success" size={15} />
+                            ) : (
+                              <XCircle className="text-danger" size={15} />
+                            )}
+                          </span>
+                        )}
                       </td>
                       <td>
                         <img
@@ -322,17 +379,19 @@ export default function UploadFiles() {
                   >
                     {completedFiles.result}%
                   </Progress>
-                  {processList.complete === true && (
+                  {processList.status === "Complete" && progress && (
                     <CardFooter>
                       <Button
                         color="primary"
+                        disabled={completeSpinner}
                         onClick={() => {
-                          setModal(true);
-                          setProgress(false);
+                          completeBtnHandler();
+                          setTaskIdBoolean(false);
+
                           setSpinner(false);
                         }}
                       >
-                        Complete
+                        Complete {completeSpinner && <Spinner size="sm" />}
                       </Button>
                     </CardFooter>
                   )}
@@ -361,6 +420,7 @@ export default function UploadFiles() {
         <br />
         <Fragment></Fragment>
       </div>
+      {/* </DragAndDropView> */}
     </Fragment>
   );
 }
