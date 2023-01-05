@@ -151,16 +151,7 @@ export default function UploadFiles() {
       return () => clearInterval(interval);
     }
   }, [taskIdBoolean]);
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (processList.complete === true) {
-        setTaskIdBoolean(false);
-        setProgress(false);
-        setSpinner(false);
-      }
-    }, 1000 * 1);
-    return () => clearInterval(interval);
-  }, [processList.complete]);
+
   return (
     <Fragment>
       <Sidebar isOpen={open} setIsOpen={setOpen} />
@@ -279,7 +270,9 @@ export default function UploadFiles() {
               </CardFooter>
               {list && (
                 <Fragment>
-                  <div className="text-center">Progress</div>
+                  <div className="text-center">
+                    Progress {spinner && <Spinner color="primary" size="sm" />}
+                  </div>
                   <Progress
                     className="m-2"
                     animated
@@ -289,7 +282,10 @@ export default function UploadFiles() {
                     )}
                     value={processList.progress ? processList.progress : 0}
                   >
-                    {processList.progress ? processList.progress : 0}%
+                    {processList.progress
+                      ? parseFloat(processList.progress).toFixed(2)
+                      : 0}
+                    %
                   </Progress>
                   <Table className="mb-0">
                     <thead>
@@ -326,6 +322,20 @@ export default function UploadFiles() {
                   >
                     {completedFiles.result}%
                   </Progress>
+                  {processList.complete === true && (
+                    <CardFooter>
+                      <Button
+                        color="primary"
+                        onClick={() => {
+                          setModal(true);
+                          setProgress(false);
+                          setSpinner(false);
+                        }}
+                      >
+                        Complete
+                      </Button>
+                    </CardFooter>
+                  )}
                 </Fragment>
               )}
             </Card>

@@ -24,13 +24,13 @@ const baseStyle = {
 };
 
 const activeStyle = {
-  borderColor: "#185db8",
-  color: "#185db8",
+  borderColor: "#54B2FC",
+  color: "#54B2FC",
 };
 
 const acceptStyle = {
-  borderColor: "#185db8",
-  color: "#185db8",
+  borderColor: "#54B2FC",
+  color: "#54B2FC",
 };
 
 const rejectStyle = {
@@ -74,6 +74,10 @@ export default function DragAndDrop(props) {
     onDrop,
     accept: ".doc .docx",
   });
+  const newInputProps = {
+    accept: "",
+  };
+  console.log("getInputProps", getInputProps());
   const style = useMemo(
     () => ({
       ...baseStyle,

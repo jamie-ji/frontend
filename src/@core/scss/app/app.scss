@@ -47,11 +47,11 @@
   height: 20%;
   width: 20%;
   border-radius: 50%;
-  background-color: var(--uib-color);
+  background-color: $appPrimary;
   transform: scale(0);
   opacity: 0.5;
   animation: pulse0112 calc(var(--uib-speed) * 1.111) ease-in-out infinite;
-  box-shadow: 0 0 20px rgba(18, 31, 53, 0.3);
+  box-shadow: 0 0 20px $appPrimary;
 }
 
 .dot-spinner__dot:nth-child(2) {
