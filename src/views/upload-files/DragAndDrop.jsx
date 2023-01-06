@@ -12,15 +12,15 @@ const baseStyle = {
   justifyContent: "center",
   padding: "20px",
   borderWidth: 2,
-  borderRadius: 2,
-  borderColor: "gray",
+  borderRadius: "0.375rem",
+  borderColor: "#185db8",
   borderStyle: "dashed",
   background: "rgba(255,255,255,0)",
   color: "#185db8",
   transition: ".25s ease-in-out",
   outline: "none",
   width: "100%",
-  height: "50vh",
+  height: "12vh",
 };
 
 const activeStyle = {
@@ -74,10 +74,7 @@ export default function DragAndDrop(props) {
     onDrop,
     accept: ".doc .docx",
   });
-  const newInputProps = {
-    accept: "",
-  };
-  console.log("getInputProps", getInputProps());
+
   const style = useMemo(
     () => ({
       ...baseStyle,
@@ -94,17 +91,7 @@ export default function DragAndDrop(props) {
         <div className="text-center">
           <RiDragDropLine fontSize={30} />
           <br />
-          {added && (
-            <Fragment>
-              Add more file
-              <br />
-            </Fragment>
-          )}
-          Drag and drop your files here.
-          <br />
-          or
-          <br />
-          Upload from your computer
+          Drop your files here.
         </div>
       </div>
     </React.Fragment>

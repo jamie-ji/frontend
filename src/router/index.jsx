@@ -1,5 +1,5 @@
 // import Milestone from "./views/Milestone";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, Flip } from "react-toastify";
 import { Fragment } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Options from "../views/options/index";
@@ -19,6 +19,7 @@ function Router() {
         autoClose={2000}
         hideProgressBar={true}
         closeButton={false}
+        transition={Flip}
         // position={"top-center"}
       />
       <div className="navbar_container">
