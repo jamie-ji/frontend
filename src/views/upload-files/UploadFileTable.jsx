@@ -12,15 +12,22 @@ function UploadFileTable({
   selectFileHandler,
   selectedFiles,
   checked,
+  selectAll,
   status,
 }) {
   const [open, setOpen] = useState("");
+
   return (
     <Fragment>
       <Table className="mb-0" responsive>
         <thead>
           <tr>
-            <th></th>
+            <th>
+              <Input
+                type="checkbox"
+                checked={selectedFiles.length === allFiles.length}                onChange={(e) => selectAll(e, selectedFiles)}
+              />
+            </th>
             <th></th>
             <th>File</th>
             <th>Author</th>

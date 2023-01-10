@@ -38,7 +38,13 @@ function Container() {
     [taskId, setTaskId] = useState(""),
     [tester, setTester] = useState([]),
     [author, setAuthor] = useState("");
-
+  const error_choices = [
+    "File not found",
+    "No file with unique content",
+    "Unknown author",
+    "Threshold not found",
+    "Error in file",
+  ];
   //   const error = {
   //     file_not_found: "File not found",
   //     no_file_with_unique_content: "No file with unique content",
@@ -66,6 +72,16 @@ function Container() {
       .then((res) => {
         setData(res.data);
         if (res.data.status === "Complete") {
+          setProcessing(false);
+          setBtnComplete(false);
+        }
+        if (res.data.error) {
+          toastify(
+            "error",
+            AiOutlineInfoCircle,
+            "Error",
+            error_choices[res.data.error - 1]
+          );
           setProcessing(false);
           setBtnComplete(false);
         }
@@ -139,6 +155,21 @@ function Container() {
       setProcessing(false);
     } else {
       setSelectedFiles([...selectedFiles, id]);
+      setData({});
+      setBtnProcess(false);
+      setProcessing(false);
+    }
+  };
+  const selectAll = (e, selectedFiles) => {
+    // console.log(selectedFiles);
+    if (e.target.checked) {
+      setSelectedFiles(allFiles.map((i) => i.id));
+
+      setData({});
+      setBtnProcess(false);
+      setProcessing(false);
+    } else {
+      setSelectedFiles([]);
       setData({});
       setBtnProcess(false);
       setProcessing(false);
@@ -251,6 +282,7 @@ function Container() {
                   selectedFiles={selectedFiles}
                   selectFileHandler={selectFileHandler}
                   checked={checked}
+                  selectAll={selectAll}
                   status={btnComplete || data.status === "Complete"}
                 />
                 {/* 
