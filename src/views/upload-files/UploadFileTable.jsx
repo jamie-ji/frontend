@@ -2,6 +2,7 @@ import classNames from "classnames";
 import React, { Fragment, useState } from "react";
 import { CheckCircle, XCircle } from "react-feather";
 import { Input, Table } from "reactstrap";
+import { nameHandler } from "../../@components/data-manager";
 import { dateFunction } from "../../@components/date-management";
 import Sidebar from "../../@components/sidebar";
 
@@ -16,7 +17,7 @@ function UploadFileTable({
   const [open, setOpen] = useState("");
   return (
     <Fragment>
-      <Table className="mb-0">
+      <Table className="mb-0" responsive>
         <thead>
           <tr>
             <th></th>
@@ -63,7 +64,9 @@ function UploadFileTable({
                   }}
                   alt=""
                 />
-                {item.file_name ? item.file_name.split("/")[1] : ""}{" "}
+                {item.file_name
+                  ? nameHandler(item.file_name.split("/")[1])
+                  : ""}{" "}
                 <Sidebar
                   isOpen={open === item.id}
                   setIsOpen={setOpen}

@@ -1,5 +1,5 @@
-export const deBugMode = false;
+export const deBugMode = true;
 export const baseUrl = deBugMode
-  ? `https://similarity.epochs.io/api`
+  ? `http://192.168.18.147:7000/api`
   : `${window.location.origin}/api`;
 export const mediaUrl = `${window.location.origin}/api/documentchecker/file/`;

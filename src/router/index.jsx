@@ -5,6 +5,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Options from "../views/options/index";
 import UploadFiles from "../views/upload-files/index";
 import { useEffect } from "react";
+import Error from "../views/misc/Error";
 
 function Router() {
   useEffect(() => {
@@ -29,6 +30,7 @@ function Router() {
         <Routes>
           <Route path="/" element={<Options />} />
           <Route path="/upload-files" element={<UploadFiles />} />
+          <Route path="*" element={<Error />} />
         </Routes>
       </BrowserRouter>
     </Fragment>

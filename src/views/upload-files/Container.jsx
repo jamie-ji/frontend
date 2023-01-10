@@ -189,6 +189,9 @@ function Container() {
         }
       });
   };
+  const scrollUp = () => {
+    window.scrollTo(0, -100);
+  };
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -287,8 +290,14 @@ function Container() {
                         : ""}{" "}
                       {!processing &&
                         data.threshold_file &&
-                        completedFiles.result < 100 &&
-                        "Upload more files"}
+                        completedFiles.result < 100 && (
+                          <span
+                            className="span-color"
+                            onClick={() => scrollUp()}
+                          >
+                            Upload more files
+                          </span>
+                        )}
                     </small>
                   </div>
                   <Progress

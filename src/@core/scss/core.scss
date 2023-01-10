@@ -9,7 +9,7 @@
 @import "./app/react-select.scss";
 @import "./app/forms.scss";
 @import "./app/pagination.scss";
-// @import "./app/menu.scss";
+@import "./app/misc.scss";
 // @import "./app/layouts.scss";
 @import "./app/navbar.scss";
 // @import "./app/authentication.scss";
@@ -253,4 +253,8 @@ code {
 .bg-gray-nt {
   background: rgba(lightgray, 0.2) !important;
   color: #cccccc;
+}
+.span-color {
+  color: red;
+  cursor: pointer;
 }
