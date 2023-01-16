@@ -1,7 +1,12 @@
 // ** to replace _
 const nameHandler = (val) => {
     if (val.includes("_")) {
-      return val.replace(/_/g, " ");
+      const split = val.split("_");
+      const spliced = split
+        .slice(0, -1)
+        .map((i) => i)
+        .join(" ");
+      return spliced;
     } else {
       return val;
     }

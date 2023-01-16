@@ -4,6 +4,9 @@
   box-shadow: $box-shadow;
   padding: 10px 20px;
   background: white;
+  position: sticky;
+  top: 0;
+  z-index: 99;
 
   .navbar_content {
     // background-color: $white;
@@ -42,7 +45,8 @@ span:hover {
 }
 .sidebar {
   position: fixed;
-  right: -500px;
+  top: 0;
+  right: -600px;
   height: 100%;
   width: 500px;
   background-color: white;
@@ -56,6 +60,7 @@ span:hover {
 
 .sidebar-overlay {
   position: fixed;
+  top: 0;
   width: 100%;
   height: 100%;
   background: rgba($color: #000000, $alpha: 0.3);
