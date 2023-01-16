@@ -5,6 +5,7 @@ import { Input, Table } from "reactstrap";
 import { nameHandler } from "../../@components/data-manager";
 import { dateFunction } from "../../@components/date-management";
 import Sidebar from "../../@components/sidebar";
+import GoogleDocsViewer from "react-google-docs-viewer";
 
 function UploadFileTable({
   author,
@@ -19,13 +20,26 @@ function UploadFileTable({
 
   return (
     <Fragment>
+      {/* <iframe
+        width="100%"
+        height="100%"
+        src={`https://docs.google.com/gview?url=${"http://192.168.18.7:8000/media/documenmt/5_lesser_rcuXlET.docx"}&embedded=true`}
+        frameborder="0"
+      ></iframe>
+      //
+      <GoogleDocsViewer
+        width="100%"
+        height="780px"
+        fileUrl="http://192.168.18.7:8000/media/documenmt/5_lesser_rcuXlET.docx"
+      /> */}
       <Table className="mb-0" responsive>
         <thead>
           <tr>
             <th>
               <Input
                 type="checkbox"
-                checked={selectedFiles.length === allFiles.length}                onChange={(e) => selectAll(e, selectedFiles)}
+                checked={selectedFiles.length === allFiles.length}
+                onChange={(e) => selectAll(e, selectedFiles)}
               />
             </th>
             <th></th>
@@ -62,6 +76,7 @@ function UploadFileTable({
                   </span>
                 )}
               </td>
+
               <td>
                 <img
                   src={require("../../@core/images/word.png")}
@@ -74,11 +89,7 @@ function UploadFileTable({
                 {item.file_name
                   ? nameHandler(item.file_name.split("/")[1])
                   : ""}{" "}
-                <Sidebar
-                  isOpen={open === item.id}
-                  setIsOpen={setOpen}
-                  id={item.id}
-                />
+                <Sidebar mediaUrl={item.full_url} />
               </td>
               <td>{item.author ? item.author : "---"}</td>
               <td>{dateFunction(item.created_at)}</td>

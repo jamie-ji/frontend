@@ -21,6 +21,30 @@ function SimilarityCountTable({ data }) {
                 <td>{item ? item.word_count : "---"}</td>
               </tr>
             ))}
+          {data.year_details && (
+            <tr>
+              <td>
+                <strong>Total:</strong>
+              </td>
+              <td>
+                <strong>
+                  {" "}
+                  {[
+                    ...data.year_details.map((i) => parseInt(i.file_count)),
+                  ].reduce((a, b) => a + b, 0)}{" "}
+                </strong>
+              </td>
+              <td>
+                {" "}
+                <strong>
+                  {" "}
+                  {[
+                    ...data.year_details.map((i) => parseInt(i.word_count)),
+                  ].reduce((a, b) => a + b, 0)}{" "}
+                </strong>
+              </td>
+            </tr>
+          )}
         </tbody>
       </Table>
     </Fragment>

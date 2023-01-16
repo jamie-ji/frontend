@@ -41,6 +41,7 @@ export default function DragAndDrop(props) {
   const { uploadFileHandler, added, setModal } = props;
   const onDrop = useCallback((acceptedFiles) => {
     if (acceptedFiles) {
+      // console.log("acceptedFiles", acceptedFiles);
       for (let i in acceptedFiles) {
         const fileExt = acceptedFiles[i].name.split(".").pop();
         if (fileExt === "doc" || fileExt === "docx") {
@@ -58,7 +59,6 @@ export default function DragAndDrop(props) {
           );
         }
       }
-
       Array.from(acceptedFiles).map(
         (file) => URL.revokeObjectURL(file) // avoid memory leak
       );
@@ -91,7 +91,7 @@ export default function DragAndDrop(props) {
         <div className="text-center">
           <RiDragDropLine fontSize={30} />
           <br />
-          Drop your files here.
+          Drop your folder here.
         </div>
       </div>
     </React.Fragment>

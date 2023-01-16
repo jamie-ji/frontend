@@ -8,6 +8,8 @@ import {
   CardHeader,
   CardTitle,
   Col,
+  Input,
+  Label,
   Progress,
   Row,
   Spinner,
@@ -54,7 +56,7 @@ function Container() {
   //   };
 
   const allAuthors = allFiles.map((i) => i.author);
-  const authors = [...new Set(allAuthors)].map((i) => ({ label: i }));
+  const authors = [...new Set(allAuthors)].map((i) => ({ label: i, value: i }));
 
   const completedColor = (arg) => {
     if (arg >= 0 && arg <= 50) {
@@ -257,10 +259,12 @@ function Container() {
                         Select files {deBugMode && `status ${data.status}`}
                       </CardTitle>
                     </Col>
+
                     <Col md="3">
                       <Select
-                        options={authors}
-                        value={{ label: author ? author : "Select author" }}
+                        color="primary"
+                        options={[{ label: "All authors" }, ...authors]}
+                        value={author}
                         onChange={(e) => {
                           setData({});
                           setBtnProcess(false);
@@ -270,6 +274,7 @@ function Container() {
                         }}
                         placeholder="Select Author"
                         components={{ Option: CustomOption }}
+                        isMulti
 
                         // theme={theme}
                       />
@@ -369,7 +374,7 @@ function Container() {
                           completeHandler();
                         }}
                       >
-                        Complete {isCompleting && <Spinner size="sm" />}
+                        Analyse {isCompleting && <Spinner size="sm" />}
                       </Button>
                     )}
                   </CardFooter>
