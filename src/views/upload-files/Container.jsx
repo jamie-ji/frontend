@@ -39,7 +39,7 @@ function Container() {
     [btnProcess, setBtnProcess] = useState(false),
     [taskId, setTaskId] = useState(""),
     [tester, setTester] = useState([]),
-    [author, setAuthor] = useState("");
+    [author, setAuthor] = useState([]);
   const error_choices = [
     "File not found",
     "No file with unique content",
@@ -47,6 +47,7 @@ function Container() {
     "Threshold not found",
     "Error in file",
   ];
+  const authorName = author.map((i) => i.label);
   //   const error = {
   //     file_not_found: "File not found",
   //     no_file_with_unique_content: "No file with unique content",
@@ -57,7 +58,8 @@ function Container() {
 
   const allAuthors = allFiles.map((i) => i.author);
   const authors = [...new Set(allAuthors)].map((i) => ({ label: i, value: i }));
-
+  console.log("autor", authors);
+  const allAuthorName = authors.map((i) => i.label);
   const completedColor = (arg) => {
     if (arg >= 0 && arg <= 50) {
       return "warning";
@@ -101,7 +103,10 @@ function Container() {
       setProcessing(true);
       axios
         .post(`${baseUrl}/documentchecker/task/`, {
-          author,
+          authors:
+            authorName && authorName.includes("All authors")
+              ? allAuthorName
+              : authorName,
           file_id: selectedFiles,
         })
         .then((res) => {
@@ -190,7 +195,9 @@ function Container() {
   };
 
   const completPercentage = () => {
-    const authFilterList = allFiles.filter((i) => i.author === author);
+    const authFilterList = allFiles.filter((i) =>
+      authorName.includes(i.author)
+    );
     const fileCount = authFilterList.length;
     const result = (data.completed_file * 100) / data.threshold_file;
 
@@ -264,12 +271,16 @@ function Container() {
                       <Select
                         color="primary"
                         options={[{ label: "All authors" }, ...authors]}
-                        value={author}
+                        value={
+                          authorName && authorName.includes("All authors")
+                            ? authors
+                            : author
+                        }
                         onChange={(e) => {
-                          setData({});
                           setBtnProcess(false);
-
-                          setAuthor(e.label);
+                          authorName && authorName.includes("All authors")
+                            ? setAuthor(authors)
+                            : setAuthor(e);
                           setProcessing(false);
                         }}
                         placeholder="Select Author"
@@ -281,7 +292,9 @@ function Container() {
                     </Col>
                   </Row>
                 </CardHeader>
+
                 <UploadFileTable
+                  authorName={authorName}
                   allFiles={allFiles}
                   author={author}
                   selectedFiles={selectedFiles}

@@ -15,6 +15,7 @@ function UploadFileTable({
   checked,
   selectAll,
   status,
+  authorName,
 }) {
   const [open, setOpen] = useState("");
 
@@ -53,12 +54,19 @@ function UploadFileTable({
             <tr
               key={index}
               className={classNames({
-                "bg-gray-nt": author && item.author !== author,
+                "bg-gray-nt":
+                  author &&
+                  !authorName.includes(item.author) &&
+                  !authorName.includes("All authors"),
               })}
             >
               <td>
                 <Input
-                  disabled={author && item.author !== author}
+                  disabled={
+                    author &&
+                    !authorName.includes(item.author) &&
+                    !authorName.includes("All authors")
+                  }
                   onChange={(e) => selectFileHandler(e, item.id)}
                   type="checkbox"
                   checked={selectedFiles.includes(item.id)}
@@ -66,7 +74,7 @@ function UploadFileTable({
                 />
               </td>
               <td>
-                {item.author === author && checked && status && (
+                {authorName.includes(item.author) && checked && status && (
                   <span>
                     {checked.includes(item.id) ? (
                       <CheckCircle className="text-success" size={15} />
