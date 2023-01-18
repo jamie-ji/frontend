@@ -55,17 +55,13 @@ function UploadFileTable({
               key={index}
               className={classNames({
                 "bg-gray-nt":
-                  author &&
-                  !authorName.includes(item.author) &&
-                  !authorName.includes("All authors"),
+                  author && author.length && !authorName.includes(item.author),
               })}
             >
               <td>
                 <Input
                   disabled={
-                    author &&
-                    !authorName.includes(item.author) &&
-                    !authorName.includes("All authors")
+                    author && author.length && !authorName.includes(item.author)
                   }
                   onChange={(e) => selectFileHandler(e, item.id)}
                   type="checkbox"
@@ -74,7 +70,11 @@ function UploadFileTable({
                 />
               </td>
               <td>
-                {authorName.includes(item.author) && checked && status && (
+                {author &&
+                author.length &&
+                authorName.includes(item.author) &&
+                checked &&
+                status ? (
                   <span>
                     {checked.includes(item.id) ? (
                       <CheckCircle className="text-success" size={15} />
@@ -82,6 +82,8 @@ function UploadFileTable({
                       <XCircle className="text-danger" size={15} />
                     )}
                   </span>
+                ) : (
+                  ""
                 )}
               </td>
 

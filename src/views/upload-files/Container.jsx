@@ -47,6 +47,7 @@ function Container() {
     "Threshold not found",
     "Error in file",
   ];
+  // console.log("allFiles", allFiles);
   const authorName = author.map((i) => i.label);
   //   const error = {
   //     file_not_found: "File not found",
@@ -58,7 +59,7 @@ function Container() {
 
   const allAuthors = allFiles.map((i) => i.author);
   const authors = [...new Set(allAuthors)].map((i) => ({ label: i, value: i }));
-  console.log("autor", authors);
+  // console.log("autor", authors);
   const allAuthorName = authors.map((i) => i.label);
   const completedColor = (arg) => {
     if (arg >= 0 && arg <= 50) {
@@ -136,8 +137,10 @@ function Container() {
     axios
       .post(`${baseUrl}/documentchecker/file/`, form_data)
       .then((res) => {
-        setAllFiles((c) => c.concat(res.data));
-        setSelectedFiles((c) => c.concat(res.data.id));
+        if (!res.data.is_error) {
+          setAllFiles((c) => c.concat(res.data));
+          setSelectedFiles((c) => c.concat(res.data.id));
+        }
         setUploading(false);
 
         // setSpinner(false);
@@ -177,6 +180,7 @@ function Container() {
       setProcessing(false);
     } else {
       setSelectedFiles([]);
+      // setAuthor([]);
       setData({});
       setBtnProcess(false);
       setProcessing(false);
@@ -242,7 +246,35 @@ function Container() {
     }, 1000 * 5);
     return () => clearInterval(interval);
   }, [taskId, processing]);
+  const handleIdByAuthor = (arr) => {
+    let ids = [];
+    for (let i = 0; i < arr.length; i++) {
+      const newIds = allFiles.filter((c) => c.author === arr[i]);
+      const idArr = newIds.map((i) => i.id);
+      ids.push(...idArr);
+      // setSelectedFiles((c) => c.concat(idArr));
+    }
+    setSelectedFiles(ids);
+  };
+  const selectAuthorHandler = (e) => {
+    const authorList = e.filter((i) => i.label !== "All authors");
+    // setAuthor(authorList);
+    const allAuth = e.map((i) => i.label);
+    if (allAuth.includes("All authors")) {
+      setAuthor(authors);
+      handleIdByAuthor(allAuthorName);
+    } else {
+      setAuthor(e);
+      handleIdByAuthor(allAuth);
+    }
 
+    // if (checkType) {
+    //   console.log("false");
+    // } else {
+    //   console.log("true");
+    // }
+    // console.log(allAuth);
+  };
   return (
     <Fragment>
       <div className="container my-5">
@@ -271,16 +303,10 @@ function Container() {
                       <Select
                         color="primary"
                         options={[{ label: "All authors" }, ...authors]}
-                        value={
-                          authorName && authorName.includes("All authors")
-                            ? authors
-                            : author
-                        }
+                        value={author}
                         onChange={(e) => {
                           setBtnProcess(false);
-                          authorName && authorName.includes("All authors")
-                            ? setAuthor(authors)
-                            : setAuthor(e);
+                          selectAuthorHandler(e);
                           setProcessing(false);
                         }}
                         placeholder="Select Author"

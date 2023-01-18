@@ -6,7 +6,6 @@ import GoogleDocsViewer from "react-google-docs-viewer";
 
 function Sidebar({ id, mediaUrl }) {
   const [isOpen, setIsOpen] = useState(false);
-
   return (
     <Fragment>
       <Button
@@ -25,7 +24,6 @@ function Sidebar({ id, mediaUrl }) {
         })}
       ></div>
       <div className={classNames("sidebar", { show: isOpen })}>
-        {" "}
         {/* <iframe
           width="100%"
           height="100%"
