@@ -1,4 +1,4 @@
-import React, { Fragment, useCallback, useMemo } from "react";
+import React, { useCallback, useMemo } from "react";
 import { useDropzone } from "react-dropzone";
 import { AiOutlineInfoCircle } from "react-icons/ai";
 
@@ -38,7 +38,7 @@ const rejectStyle = {
 };
 
 export default function DragAndDrop(props) {
-  const { uploadFileHandler, added, setModal } = props;
+  const { uploadFileHandler } = props;
   const onDrop = useCallback((acceptedFiles) => {
     if (acceptedFiles) {
       // console.log("acceptedFiles", acceptedFiles);

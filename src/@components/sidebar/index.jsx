@@ -5,18 +5,10 @@ import { Button } from "reactstrap";
 import GoogleDocsViewer from "react-google-docs-viewer";
 import FileViewer from "react-file-viewer";
 
-function Sidebar({ id, mediaUrl }) {
-  const [isOpen, setIsOpen] = useState(false);
-  const [isData, setIsData] = useState(false);
-  useEffect(() => {
-    setIsData(false);
-    setTimeout(() => {
-      setIsData(true);
-    }, 50);
-  }, [isOpen]);
+function Sidebar({ mediaUrl, setIsOpen, isOpen, isData }) {
   return (
     <Fragment>
-      <Button
+      {/* <Button
         size="sm"
         className="p-0 text-primary"
         color="default"
@@ -24,7 +16,7 @@ function Sidebar({ id, mediaUrl }) {
         style={{ fontSize: "10px" }}
       >
         <u>View</u>
-      </Button>
+      </Button> */}
       <div
         onClick={() => setIsOpen(false)}
         className={classNames("sidebar-overlay", {
@@ -44,8 +36,7 @@ function Sidebar({ id, mediaUrl }) {
         {mediaUrl}
         {isData && (
           <FileViewer
-            width="100%"
-            height="780px"
+            style={{ width: "100px", height: "780px" }}
             fileType="docx"
             filePath={mediaUrl}
           />

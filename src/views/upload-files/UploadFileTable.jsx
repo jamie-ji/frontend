@@ -1,11 +1,10 @@
 import classNames from "classnames";
 import React, { Fragment, useState } from "react";
 import { CheckCircle, XCircle } from "react-feather";
-import { Input, Table } from "reactstrap";
+import { Button, Input, Table } from "reactstrap";
 import { nameHandler } from "../../@components/data-manager";
 import { dateFunction } from "../../@components/date-management";
 import Sidebar from "../../@components/sidebar";
-import GoogleDocsViewer from "react-google-docs-viewer";
 
 function UploadFileTable({
   author,
@@ -17,8 +16,18 @@ function UploadFileTable({
   status,
   authorName,
 }) {
-  const [open, setOpen] = useState("");
+  const [isOpen, setIsOpen] = useState(null);
+  const [isData, setIsData] = useState(false);
+  const [mediaUrl, setMediaUrl] = useState(null);
 
+  const handleOpen = (url) => {
+    setIsData(false);
+    setMediaUrl(url);
+    setTimeout(() => {
+      setIsData(true);
+      setIsOpen(!isOpen);
+    }, 50);
+  };
   return (
     <Fragment>
       <Table className="mb-0" responsive>
@@ -87,7 +96,14 @@ function UploadFileTable({
                 {item.file_name
                   ? nameHandler(item.file_name.split("/")[1])
                   : ""}{" "}
-                <Sidebar mediaUrl={item.full_url} />
+                <Button
+                  size="sm"
+                  className="p-0 text-primary"
+                  color="default"
+                  onClick={() => handleOpen(item.full_url)}
+                >
+                  View
+                </Button>
               </td>
               <td>{item.author ? item.author : "---"}</td>
               <td>{dateFunction(item.created_at)}</td>
@@ -95,6 +111,13 @@ function UploadFileTable({
           ))}
         </tbody>
       </Table>
+      <Sidebar
+        mediaUrl={mediaUrl}
+        setIsOpen={setIsOpen}
+        isOpen={isOpen}
+        isData={isData}
+        setIsData={setIsData}
+      />
     </Fragment>
   );
 }
