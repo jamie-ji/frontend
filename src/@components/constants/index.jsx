@@ -1,4 +1,4 @@
-export const deBugMode = true;
+export const deBugMode = false;
 export const baseUrl = deBugMode
   ? `http://192.168.18.137:7000/api`
   : `${window.location.origin}/api`;
