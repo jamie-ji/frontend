@@ -21,18 +21,6 @@ function UploadFileTable({
 
   return (
     <Fragment>
-      {/* <iframe
-        width="100%"
-        height="100%"
-        src={`https://docs.google.com/gview?url=${"http://192.168.18.7:8000/media/documenmt/5_lesser_rcuXlET.docx"}&embedded=true`}
-        frameborder="0"
-      ></iframe>
-      //
-      <GoogleDocsViewer
-        width="100%"
-        height="780px"
-        fileUrl="http://192.168.18.7:8000/media/documenmt/5_lesser_rcuXlET.docx"
-      /> */}
       <Table className="mb-0" responsive>
         <thead>
           <tr>

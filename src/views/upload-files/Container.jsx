@@ -285,7 +285,7 @@ function Container() {
     axios
       .get(`${baseUrl}/configurations/`)
       .then((res) => {
-        setThreshold(res.data.threshhold);
+        setThreshold(res.data.threshold);
         // console.log("thrushold", thrushold);
       })
       .catch((e) => {
@@ -355,9 +355,7 @@ function Container() {
                   status={btnComplete || data.status === "Complete"}
                 />
                 <CardFooter>
-                  {allFiles.length > 0 &&
-                  allFiles.length === selectedFiles.length &&
-                  selectedFiles.length >= threshold ? (
+                  {selectedFiles.length >= threshold ? (
                     <Button
                       disabled={btnComplete}
                       color="primary"
