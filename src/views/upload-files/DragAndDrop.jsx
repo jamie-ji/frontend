@@ -1,10 +1,7 @@
-import React, { Fragment, useCallback, useMemo } from "react";
+import React, { useCallback, useMemo } from "react";
 import { useDropzone } from "react-dropzone";
-import { AiOutlineInfoCircle } from "react-icons/ai";
 
 import { RiDragDropLine } from "react-icons/ri";
-
-import toastify from "../../@components/toastify";
 
 const baseStyle = {
   display: "flex",
@@ -14,7 +11,7 @@ const baseStyle = {
   borderWidth: 2,
   borderRadius: "0.375rem",
   borderColor: "#185db8",
-  borderStyle: "dashed",
+  borderStyle: "solid",
   background: "rgba(255,255,255,0)",
   color: "#185db8",
   transition: ".25s ease-in-out",
@@ -38,26 +35,11 @@ const rejectStyle = {
 };
 
 export default function DragAndDrop(props) {
-  const { uploadFileHandler, added, setModal } = props;
+  const { uploadFileHandler } = props;
   const onDrop = useCallback((acceptedFiles) => {
     if (acceptedFiles) {
-      // console.log("acceptedFiles", acceptedFiles);
       for (let i in acceptedFiles) {
-        const fileExt = acceptedFiles[i].name.split(".").pop();
-        if (fileExt === "doc" || fileExt === "docx") {
-          uploadFileHandler(acceptedFiles[i]);
-        } else {
-          toastify(
-            "error",
-            AiOutlineInfoCircle,
-            "Invalid file",
-            `${acceptedFiles[i].name} is not allow as it is ${acceptedFiles[
-              i
-            ].name
-              .split(".")
-              .pop()} file`
-          );
-        }
+        uploadFileHandler(acceptedFiles[i]);
       }
       Array.from(acceptedFiles).map(
         (file) => URL.revokeObjectURL(file) // avoid memory leak

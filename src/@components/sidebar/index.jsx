@@ -1,23 +1,12 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment } from "react";
 import classNames from "classnames";
-// import { mediaUrl } from "../constants/index";
-import { Button } from "reactstrap";
-import GoogleDocsViewer from "react-google-docs-viewer";
 
-function Sidebar({ id, mediaUrl }) {
-  const [isOpen, setIsOpen] = useState(false);
+import FileViewer from "react-file-viewer";
 
+function Sidebar({ mediaUrl, setIsOpen, isOpen, isData }) {
+  const fileExt = mediaUrl ? mediaUrl.split(".").pop() : "docx";
   return (
     <Fragment>
-      <Button
-        size="sm"
-        className="p-0 text-primary"
-        color="default"
-        onClick={() => setIsOpen(true)}
-        style={{ fontSize: "10px" }}
-      >
-        <u>View</u>
-      </Button>
       <div
         onClick={() => setIsOpen(false)}
         className={classNames("sidebar-overlay", {
@@ -25,16 +14,14 @@ function Sidebar({ id, mediaUrl }) {
         })}
       ></div>
       <div className={classNames("sidebar", { show: isOpen })}>
-        {" "}
-        {/* <iframe
-          width="100%"
-          height="100%"
-          src={`https://docs.google.com/gview?url=${
-            mediaUrl + id
-          }&embedded=true`}
-          frameborder="0"
-        ></iframe> */}
-        <GoogleDocsViewer width="100%" height="780px" fileUrl={mediaUrl} />
+        {isData && (
+          <FileViewer
+            width="100%"
+            height="780px"
+            fileType={fileExt}
+            filePath={mediaUrl}
+          />
+        )}
       </div>
     </Fragment>
   );

@@ -1,11 +1,11 @@
 import classNames from "classnames";
 import React, { Fragment, useState } from "react";
 import { CheckCircle, XCircle } from "react-feather";
-import { Input, Table } from "reactstrap";
+import { Button, Input, Table } from "reactstrap";
 import { nameHandler } from "../../@components/data-manager";
 import { dateFunction } from "../../@components/date-management";
 import Sidebar from "../../@components/sidebar";
-import GoogleDocsViewer from "react-google-docs-viewer";
+import { FileIcon, defaultStyles } from "react-file-icon";
 
 function UploadFileTable({
   author,
@@ -17,22 +17,25 @@ function UploadFileTable({
   status,
   authorName,
 }) {
-  const [open, setOpen] = useState("");
+  // const [open, setOpen] = useState("");
+  const [isOpen, setIsOpen] = useState(null);
+  const [isData, setIsData] = useState(false);
+  const [mediaUrl, setMediaUrl] = useState(null);
+
+  const handleOpen = (url) => {
+    setIsData(false);
+    setMediaUrl(url);
+    setTimeout(() => {
+      setIsData(true);
+      setIsOpen(!isOpen);
+    }, 50);
+  };
+  const extensionStyle = (arg) => {
+    return arg === "csv" ? "xlsx" : arg;
+  };
 
   return (
     <Fragment>
-      {/* <iframe
-        width="100%"
-        height="100%"
-        src={`https://docs.google.com/gview?url=${"http://192.168.18.7:8000/media/documenmt/5_lesser_rcuXlET.docx"}&embedded=true`}
-        frameborder="0"
-      ></iframe>
-      //
-      <GoogleDocsViewer
-        width="100%"
-        height="780px"
-        fileUrl="http://192.168.18.7:8000/media/documenmt/5_lesser_rcuXlET.docx"
-      /> */}
       <Table className="mb-0" responsive>
         <thead>
           <tr>
@@ -55,17 +58,13 @@ function UploadFileTable({
               key={index}
               className={classNames({
                 "bg-gray-nt":
-                  author &&
-                  !authorName.includes(item.author) &&
-                  !authorName.includes("All authors"),
+                  author && author.length && !authorName.includes(item.author),
               })}
             >
               <td>
                 <Input
                   disabled={
-                    author &&
-                    !authorName.includes(item.author) &&
-                    !authorName.includes("All authors")
+                    author && author.length && !authorName.includes(item.author)
                   }
                   onChange={(e) => selectFileHandler(e, item.id)}
                   type="checkbox"
@@ -74,7 +73,11 @@ function UploadFileTable({
                 />
               </td>
               <td>
-                {authorName.includes(item.author) && checked && status && (
+                {author &&
+                author.length &&
+                authorName.includes(item.author) &&
+                checked &&
+                status ? (
                   <span>
                     {checked.includes(item.id) ? (
                       <CheckCircle className="text-success" size={15} />
@@ -82,22 +85,29 @@ function UploadFileTable({
                       <XCircle className="text-danger" size={15} />
                     )}
                   </span>
+                ) : (
+                  ""
                 )}
               </td>
 
               <td>
-                <img
-                  src={require("../../@core/images/word.png")}
-                  style={{
-                    height: "20px",
-                    objectFit: "contain",
-                  }}
-                  alt=""
-                />
+                <FileIcon
+                  extension={item.full_url.split(".").pop()}
+                  {...defaultStyles[
+                    extensionStyle(item.full_url.split(".").pop())
+                  ]}
+                />{" "}
                 {item.file_name
                   ? nameHandler(item.file_name.split("/")[1])
                   : ""}{" "}
-                <Sidebar mediaUrl={item.full_url} />
+                <Button
+                  size="sm"
+                  className="p-0 text-primary"
+                  color="default"
+                  onClick={() => handleOpen(item.full_url)}
+                >
+                  View
+                </Button>
               </td>
               <td>{item.author ? item.author : "---"}</td>
               <td>{dateFunction(item.created_at)}</td>
@@ -105,6 +115,13 @@ function UploadFileTable({
           ))}
         </tbody>
       </Table>
+      <Sidebar
+        mediaUrl={mediaUrl}
+        setIsOpen={setIsOpen}
+        isOpen={isOpen}
+        isData={isData}
+        setIsData={setIsData}
+      />
     </Fragment>
   );
 }
