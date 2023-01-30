@@ -263,3 +263,17 @@ code {
   padding: 10px !important;
   width: 100% !important;
 }
+
+.description_p {
+  white-space: nowrap;
+  overflow: hidden !important;
+  text-overflow: ellipsis;
+  margin: 0;
+  width: fit-content;
+  max-width: 400px;
+
+  &::first-letter {
+    text-transform: uppercase;
+  }
+}
+

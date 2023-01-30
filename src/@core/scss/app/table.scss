@@ -63,6 +63,9 @@ table {
   th,
   td {
     white-space: nowrap;
+    svg {
+      width: 15px;
+    }
   }
 }
 

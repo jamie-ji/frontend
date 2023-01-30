@@ -6,6 +6,9 @@ import { nameHandler } from "../../@components/data-manager";
 import { dateFunction } from "../../@components/date-management";
 import Sidebar from "../../@components/sidebar";
 
+import { FileIcon, defaultStyles } from "react-file-icon";
+
+
 function UploadFileTable({
   author,
   allFiles,
@@ -16,9 +19,23 @@ function UploadFileTable({
   status,
   authorName,
 }) {
+
+  // const [open, setOpen] = useState("");
   const [isOpen, setIsOpen] = useState(null);
   const [isData, setIsData] = useState(false);
   const [mediaUrl, setMediaUrl] = useState(null);
+
+  const handleOpen = (url) => {
+    setIsData(false);
+    setMediaUrl(url);
+    setTimeout(() => {
+      setIsData(true);
+      setIsOpen(!isOpen);
+    }, 50);
+  };
+  const extensionStyle = (arg) => {
+    return arg === "csv" ? "xlsx" : arg;
+  };
 
   const handleOpen = (url) => {
     setIsData(false);
@@ -33,14 +50,13 @@ function UploadFileTable({
       <Table className="mb-0" responsive>
         <thead>
           <tr>
-            <th>
+            <th colSpan={2}>
               <Input
                 type="checkbox"
                 checked={selectedFiles.length === allFiles.length}
                 onChange={(e) => selectAll(e, selectedFiles)}
               />
             </th>
-            <th></th>
             <th>File</th>
             <th>Author</th>
             <th>Created at</th>
@@ -71,6 +87,9 @@ function UploadFileTable({
                 author.length &&
                 authorName.includes(item.author) &&
                 checked &&
+
+                selectedFiles.includes(item.id) &&
+
                 status ? (
                   <span>
                     {checked.includes(item.id) ? (
@@ -84,18 +103,20 @@ function UploadFileTable({
                 )}
               </td>
 
-              <td>
-                <img
-                  src={require("../../@core/images/word.png")}
-                  style={{
-                    height: "20px",
-                    objectFit: "contain",
-                  }}
-                  alt=""
-                />
-                {item.file_name
-                  ? nameHandler(item.file_name.split("/")[1])
-                  : ""}{" "}
+
+              <td className="text-nowrap d-flex">
+                <p className="description_p">
+                  <FileIcon
+                    extension={item.full_url.split(".").pop()}
+                    {...defaultStyles[
+                      extensionStyle(item.full_url.split(".").pop())
+                    ]}
+                  />{" "}
+                  {item.file_name
+                    ? nameHandler(item.file_name.split("/")[1])
+                    : ""}
+                </p>
+
                 <Button
                   size="sm"
                   className="p-0 text-primary"
