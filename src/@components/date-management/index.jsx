@@ -32,6 +32,9 @@ const currentTime = (arg) => {
   // ** backend format
   backendFormat = (arg) => {
     return moment(arg).format("YYYY-MM-DD");
+  },
+  yearFormat = (arg) => {
+    return moment(arg).format("YYYY");
   };
 
 // ** export
@@ -43,4 +46,5 @@ export {
   backendFormat,
   dateAndTimeFunction,
   fromNowTime,
+  yearFormat,
 };
