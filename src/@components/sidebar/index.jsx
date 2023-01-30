@@ -1,9 +1,14 @@
-import React, { Fragment, useState, useEffect } from "react";
+
+import React, { Fragment } from "react";
 import classNames from "classnames";
 
 import FileViewer from "react-file-viewer";
 
 function Sidebar({ mediaUrl, setIsOpen, isOpen, isData }) {
+
+  const fileExt = mediaUrl ? mediaUrl.split(".").pop() : "docx";
+
+
   return (
     <Fragment>
       <div
@@ -15,8 +20,11 @@ function Sidebar({ mediaUrl, setIsOpen, isOpen, isData }) {
       <div className={classNames("sidebar", { show: isOpen })}>
         {isData && (
           <FileViewer
-            style={{ width: "100px", height: "780px" }}
-            fileType="docx"
+
+            width="100%"
+            height="780px"
+            fileType={fileExt}
+
             filePath={mediaUrl}
           />
         )}

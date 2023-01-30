@@ -8,8 +8,6 @@ import {
   CardHeader,
   CardTitle,
   Col,
-  Input,
-  Label,
   Progress,
   Row,
   Spinner,
@@ -25,8 +23,6 @@ import { baseUrl, deBugMode } from "../../@components/constants";
 import { forEveryKeyLoop } from "../../@components/loops";
 import toastify from "../../@components/toastify";
 import { AiOutlineInfoCircle } from "react-icons/ai";
-import { CheckCircle } from "react-feather";
-import Sidebar from "../../@components/sidebar";
 
 function Container() {
   const [data, setData] = useState({}),
@@ -34,33 +30,44 @@ function Container() {
     [selectedFiles, setSelectedFiles] = useState([]),
     [processing, setProcessing] = useState(false),
     [uploading, setUploading] = useState(false),
-    [isCompleting, setIsCompleting] = useState(false),
     [btnComplete, setBtnComplete] = useState(false),
     [btnProcess, setBtnProcess] = useState(false),
     [threshold, setThreshold] = useState(""),
     [taskId, setTaskId] = useState(""),
     [tester, setTester] = useState([]),
+    [uploadedCount, setUploadedCount] = useState(0),
+    [errCount, setErrCount] = useState(0),
     [author, setAuthor] = useState([]);
-  const error_choices = [
-    "File not found",
-    "No file with unique content",
-    "Unknown author",
-    "Threshold not found",
-    "Error in file",
-  ];
-  // console.log("allFiles", allFiles);
-  const authorName = author.map((i) => i.label);
-  //   const error = {
-  //     file_not_found: "File not found",
-  //     no_file_with_unique_content: "No file with unique content",
-  //     unknown_file_extension: "Unknown file extension",
-  //     unknown_author: "Unknown author",
-  //     threshold_not_found: "Threshold not found",
-  //   };
 
-  const allAuthors = allFiles.map((i) => i.author);
+
+  const authorName = author.map((i) => i.label);
+
+  const handleIdByAuthor = (arr) => {
+    let ids = [];
+    for (let i = 0; i < arr.length; i++) {
+      const newIds = allFiles.filter((c) => c.author === arr[i]);
+      const idArr = newIds.map((i) => i.id);
+      ids.push(...idArr);
+      // setSelectedFiles((c) => c.concat(idArr));
+    }
+    setSelectedFiles(ids);
+  };
+  const selectAuthorHandler = (e) => {
+    const allAuth = e.map((i) => i.label);
+    if (allAuth.includes("All authors")) {
+      setAuthor(authors);
+      handleIdByAuthor(allAuthorName);
+    } else {
+      setAuthor(e);
+      handleIdByAuthor(allAuth);
+    }
+  };
+
+  const allAuthors = allFiles.filter((i) => i.author).map((i) => i.author);
   const authors = [...new Set(allAuthors)].map((i) => ({ label: i, value: i }));
-  // console.log("autor", authors);
+
+
+
   const allAuthorName = authors.map((i) => i.label);
   const completedColor = (arg) => {
     if (arg >= 0 && arg <= 50) {
@@ -72,76 +79,73 @@ function Container() {
     }
   };
 
-  // const getTask = (id) => {
-  //   axios
-  //     .get(`${baseUrl}/documentchecker/task/${id ? id : taskId}/`)
-  //     .then((res) => {
-  //       setData(res.data);
-  //       if (res.data.status === "Complete") {
-  //         setProcessing(false);
-  //         setBtnComplete(false);
-  //       }
-  //       if (res.data.error) {
-  //         toastify(
-  //           "error",
-  //           AiOutlineInfoCircle,
-  //           "Error",
-  //           error_choices[res.data.error - 1]
-  //         );
-  //         setProcessing(false);
-  //         setBtnComplete(false);
-  //       }
-  //       // if (res.data.error !== null) {
-  //       // }
-  //       // setTaskId(res.data.task_id);
-  //     });
-  // };
 
-  // const handleProcess = () => {
-  //   if (!author) {
-  //     toastify("error", AiOutlineInfoCircle, "Author", "Select author");
-  //   } else {
-  //     setData("");
-  //     setProcessing(true);
-  //     axios
-  //       .post(`${baseUrl}/documentchecker/task/`, {
-  //         authors: authorName,
-  //         // && authorName.includes("All authors")
-  //         //   ? allAuthorName
-  //         //   : authorName,
-  //         file_id: selectedFiles,
-  //       })
-  //       .then((res) => {
-  //         setTaskId(res.data.task_id);
-  //         setTester([...tester, tester]);
-  //         getTask(res.data.task_id);
-  //         setBtnProcess(true);
-  //       })
-  //       .catch((e) => {
-  //         setProcessing(false);
-  //         if (e.response && e.response.status === 400) {
-  //           forEveryKeyLoop(e.response.data);
-  //           setProcessing(false);
-  //         }
-  //       });
-  //   }
-  // };
+  const getTask = (id) => {
+    axios
+      .get(`${baseUrl}/documentchecker/task/${id ? id : taskId}/`)
+      .then((res) => {
+        setData(res.data);
+        if (res.data.status === "Complete") {
+          setProcessing(false);
+          setBtnComplete(false);
+        }
+
+        // if (res.data.error !== null) {
+        // }
+        // setTaskId(res.data.task_id);
+      })
+      .catch(() => {
+        setProcessing(false);
+        setBtnComplete(false);
+      });
+  };
+
+  const handleProcess = () => {
+    if (author.length === 0) {
+      toastify("error", AiOutlineInfoCircle, "Author", "Select author");
+    } else {
+      setData("");
+      setProcessing(true);
+      axios
+        .post(`${baseUrl}/documentchecker/task/`, {
+          authors: authorName,
+          file_id: selectedFiles,
+        })
+        .then((res) => {
+          setTaskId(res.data.task_id);
+          setTester([...tester, tester]);
+          getTask(res.data.task_id);
+          setBtnProcess(true);
+        })
+        .catch((e) => {
+          setProcessing(false);
+          if (e.response && e.response.status === 400) {
+            forEveryKeyLoop(e.response.data);
+            setProcessing(false);
+          }
+        });
+    }
+  };
+
+
   const uploadFileHandler = (file) => {
     setUploading(true);
     setProcessing(false);
     setData({});
     setBtnProcess(false);
-
+    setUploadedCount((c) => c + 1);
     // setModal(true);
     let form_data = new FormData();
     form_data.append("file", file);
     axios
       .post(`${baseUrl}/documentchecker/file/`, form_data)
       .then((res) => {
-        if (!res.data.is_error) {
-          setAllFiles((c) => c.concat(res.data));
-          setSelectedFiles((c) => c.concat(res.data.id));
-        }
+
+        setAllFiles((c) => c.concat(res.data));
+        setSelectedFiles((c) => c.concat(res.data.id));
+
+        // setUploadedCount(uploadedCount + 1);
+
 
         setUploading(false);
 
@@ -150,6 +154,7 @@ function Container() {
       })
       .catch((e) => {
         setUploading(false);
+        setErrCount((c) => c + 1);
         if (e.response && e.response.status === 400) {
           forEveryKeyLoop(e.response.data);
           setUploading(false);
@@ -174,7 +179,6 @@ function Container() {
     }
   };
   const selectAll = (e, selectedFiles) => {
-    // console.log(selectedFiles);
     if (e.target.checked) {
       setSelectedFiles(allFiles.map((i) => i.id));
 
@@ -189,6 +193,8 @@ function Container() {
       setProcessing(false);
     }
   };
+
+  // ** to show check icons
   const checkHandler = () => {
     let files = [];
     if (data.year_details) {
@@ -201,47 +207,24 @@ function Container() {
     }
   };
 
-  const completPercentage = () => {
-    const authFilterList = allFiles.filter((i) =>
-      authorName.includes(i.author)
-    );
-    const fileCount = authFilterList.length;
-    const result = (data.completed_file * 100) / data.threshold_file;
+  const fileUploadPercentage =
+    ((allFiles.length + errCount) / uploadedCount) * 100;
 
-    return {
-      result: parseFloat(result ? result : 0).toFixed(2),
-      fileCount,
-    };
-  };
-  const completedFiles = completPercentage();
   const checked = checkHandler();
 
-  const completeHandler = (id) => {
-    setIsCompleting(true);
-    setBtnComplete(true);
 
+  const getThreshold = () => {
     axios
-      .post(`${baseUrl}/documentchecker/task/`, {
-        file_id: selectedFiles,
-      })
+      .get(`${baseUrl}/configurations/`)
       .then((res) => {
-        setIsCompleting(false);
-        setBtnComplete(false);
-        setBtnProcess(true);
-        toastify("success", CheckCircle, "Task successfully completed");
+        setThreshold(res.data);
       })
-      .catch((e) => {
-        setIsCompleting(false);
-        if (e.response && e.response.status === 400) {
-          forEveryKeyLoop(e.response.data);
-          setIsCompleting(false);
-          setBtnComplete(false);
-        }
-      });
+      .catch((e) => {});
+
   };
-  const scrollUp = () => {
-    window.scrollTo(0, -100);
-  };
+  useEffect(() => {
+    getThreshold();
+  }, []);
 
   // useEffect(() => {
   //   const interval = setInterval(() => {
@@ -310,6 +293,18 @@ function Container() {
                 setModal={setUploading}
                 uploadFileHandler={uploadFileHandler}
               />
+              <Progress
+                className="mt-2"
+                animated
+                striped
+                value={fileUploadPercentage ? fileUploadPercentage : 0}
+                color={completedColor(
+                  fileUploadPercentage ? fileUploadPercentage : 0
+                )}
+              >
+                File Uploading{" "}
+                {fileUploadPercentage ? Math.round(fileUploadPercentage) : 0}%
+              </Progress>
             </CardHeader>
           </Card>
           <br />
@@ -331,6 +326,10 @@ function Container() {
                         value={author}
                         onChange={(e) => {
                           setBtnProcess(false);
+
+                          setData({});
+
+
                           selectAuthorHandler(e);
                           setProcessing(false);
                         }}
@@ -354,33 +353,54 @@ function Container() {
                   selectAll={selectAll}
                   status={btnComplete || data.status === "Complete"}
                 />
+
+
                 <CardFooter>
-                  {selectedFiles.length >= threshold ? (
+                  {fileUploadPercentage === 100 &&
+                  selectedFiles.length >= threshold.threshold ? (
                     <Button
-                      disabled={btnComplete}
                       color="primary"
                       onClick={() => {
-                        // toastify(
-                        //   "success",
-                        //   CheckCircle,
-                        //   "Successfully completed"
-                        // );
-                        // setData({ ...data, status: "Failed" });
-                        setProcessing(false);
-
-                        completeHandler();
-                        // getThreshold();
+                        handleProcess();
                       }}
+                      disabled={
+                        processing || data.status === "Complete" || btnProcess
+                      }
                     >
-                      Complete {isCompleting && <Spinner size="sm" />}
+                      Complete {processing && <Spinner size="sm" />}
                     </Button>
                   ) : (
                     <CardBody>
-                      <Alert color="danger">Add more files</Alert>
+                      {fileUploadPercentage < 100 ? (
+                        ""
+                      ) : (
+                        <Alert color="danger">
+                          {" "}
+                          {allFiles.length >= threshold.threshold &&
+                          selectedFiles.length < threshold.threshold
+                            ? "Select more files"
+                            : "Add more files"}
+                        </Alert>
+                      )}
+
                     </CardBody>
                   )}
                 </CardFooter>
               </Card>
+
+              <br />
+              {data.year_details && (
+                <Card>
+                  <CardHeader className="pb-0">
+                    <CardTitle tag={"h5"} className="m-0">
+                      Similarities {data.threshold_similarity}
+                    </CardTitle>
+                  </CardHeader>
+
+                  <SimilarityCountTable data={data} />
+                </Card>
+              )}
+
             </Fragment>
           ) : (
             <Card>
