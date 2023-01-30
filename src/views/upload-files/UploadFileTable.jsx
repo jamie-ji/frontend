@@ -5,7 +5,9 @@ import { Button, Input, Table } from "reactstrap";
 import { nameHandler } from "../../@components/data-manager";
 import { dateFunction } from "../../@components/date-management";
 import Sidebar from "../../@components/sidebar";
+
 import { FileIcon, defaultStyles } from "react-file-icon";
+
 
 function UploadFileTable({
   author,
@@ -17,6 +19,7 @@ function UploadFileTable({
   status,
   authorName,
 }) {
+
   // const [open, setOpen] = useState("");
   const [isOpen, setIsOpen] = useState(null);
   const [isData, setIsData] = useState(false);
@@ -34,6 +37,14 @@ function UploadFileTable({
     return arg === "csv" ? "xlsx" : arg;
   };
 
+  const handleOpen = (url) => {
+    setIsData(false);
+    setMediaUrl(url);
+    setTimeout(() => {
+      setIsData(true);
+      setIsOpen(!isOpen);
+    }, 50);
+  };
   return (
     <Fragment>
       <Table className="mb-0" responsive>
@@ -76,7 +87,9 @@ function UploadFileTable({
                 author.length &&
                 authorName.includes(item.author) &&
                 checked &&
+
                 selectedFiles.includes(item.id) &&
+
                 status ? (
                   <span>
                     {checked.includes(item.id) ? (
@@ -90,6 +103,7 @@ function UploadFileTable({
                 )}
               </td>
 
+
               <td className="text-nowrap d-flex">
                 <p className="description_p">
                   <FileIcon
@@ -102,6 +116,7 @@ function UploadFileTable({
                     ? nameHandler(item.file_name.split("/")[1])
                     : ""}
                 </p>
+
                 <Button
                   size="sm"
                   className="p-0 text-primary"

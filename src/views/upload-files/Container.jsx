@@ -39,6 +39,7 @@ function Container() {
     [errCount, setErrCount] = useState(0),
     [author, setAuthor] = useState([]);
 
+
   const authorName = author.map((i) => i.label);
 
   const handleIdByAuthor = (arr) => {
@@ -65,6 +66,8 @@ function Container() {
   const allAuthors = allFiles.filter((i) => i.author).map((i) => i.author);
   const authors = [...new Set(allAuthors)].map((i) => ({ label: i, value: i }));
 
+
+
   const allAuthorName = authors.map((i) => i.label);
   const completedColor = (arg) => {
     if (arg >= 0 && arg <= 50) {
@@ -75,6 +78,7 @@ function Container() {
       return "success";
     }
   };
+
 
   const getTask = (id) => {
     axios
@@ -123,6 +127,7 @@ function Container() {
     }
   };
 
+
   const uploadFileHandler = (file) => {
     setUploading(true);
     setProcessing(false);
@@ -135,10 +140,12 @@ function Container() {
     axios
       .post(`${baseUrl}/documentchecker/file/`, form_data)
       .then((res) => {
+
         setAllFiles((c) => c.concat(res.data));
         setSelectedFiles((c) => c.concat(res.data.id));
 
         // setUploadedCount(uploadedCount + 1);
+
 
         setUploading(false);
 
@@ -157,6 +164,7 @@ function Container() {
         // setModal(false);
       });
   };
+
   const selectFileHandler = (e, id) => {
     if (!e.target.checked) {
       setSelectedFiles(selectedFiles.filter((i) => i !== id));
@@ -179,6 +187,7 @@ function Container() {
       setProcessing(false);
     } else {
       setSelectedFiles([]);
+      // setAuthor([]);
       setData({});
       setBtnProcess(false);
       setProcessing(false);
@@ -203,6 +212,7 @@ function Container() {
 
   const checked = checkHandler();
 
+
   const getThreshold = () => {
     axios
       .get(`${baseUrl}/configurations/`)
@@ -210,21 +220,69 @@ function Container() {
         setThreshold(res.data);
       })
       .catch((e) => {});
+
   };
   useEffect(() => {
     getThreshold();
   }, []);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      // getTask()
-      if (processing) {
-        getTask(taskId);
-      }
-    }, 1000 * 5);
-    return () => clearInterval(interval);
-  }, [taskId, processing]);
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     // getTask()
+  //     if (processing) {
+  //       getTask(taskId);
+  //     }
+  //   }, 1000 * 5);
+  //   return () => clearInterval(interval);
+  // }, [taskId, processing]);
+  const handleIdByAuthor = (arr) => {
+    let ids = [];
+    for (let i = 0; i < arr.length; i++) {
+      const newIds = allFiles.filter((c) => c.author === arr[i]);
+      const idArr = newIds.map((i) => i.id);
+      ids.push(...idArr);
+      // setSelectedFiles((c) => c.concat(idArr));
+    }
+    setSelectedFiles(ids);
+  };
+  const selectAuthorHandler = (e) => {
+    const authorList = e.filter((i) => i.label !== "All authors");
+    // setAuthor(authorList);
+    const allAuth = e.map((i) => i.label);
+    if (allAuth.includes("All authors")) {
+      setAuthor(authors);
+      handleIdByAuthor(allAuthorName);
+    } else {
+      setAuthor(e);
+      handleIdByAuthor(allAuth);
+    }
 
+    // if (checkType) {
+    //   console.log("false");
+    // } else {
+    //   console.log("true");
+    // }
+    // console.log(allAuth);
+  };
+  const getThreshold = () => {
+    axios
+      .get(`${baseUrl}/configurations/`)
+      .then((res) => {
+        setThreshold(res.data.threshold);
+        // console.log("thrushold", thrushold);
+      })
+      .catch((e) => {
+        console.log("e", e);
+      });
+  };
+  useEffect(() => {
+    // if (allFiles.length > 0 && allFiles.length === selectedFiles.length) {
+    //   console.log("QQ");
+    getThreshold();
+    // }
+  }, []);
+
+  // console.log("trushold", thrushold);
   return (
     <Fragment>
       <div className="container my-5">
@@ -262,13 +320,15 @@ function Container() {
                     </Col>
 
                     <Col md="3">
-                      <Select
+                      {/* <Select
                         color="primary"
                         options={[{ label: "All authors" }, ...authors]}
                         value={author}
                         onChange={(e) => {
                           setBtnProcess(false);
+
                           setData({});
+
 
                           selectAuthorHandler(e);
                           setProcessing(false);
@@ -277,8 +337,8 @@ function Container() {
                         components={{ Option: CustomOption }}
                         isMulti
 
-                        // theme={theme}
-                      />
+                      
+                      /> */}
                     </Col>
                   </Row>
                 </CardHeader>
@@ -293,6 +353,7 @@ function Container() {
                   selectAll={selectAll}
                   status={btnComplete || data.status === "Complete"}
                 />
+
 
                 <CardFooter>
                   {fileUploadPercentage === 100 &&
@@ -321,10 +382,12 @@ function Container() {
                             : "Add more files"}
                         </Alert>
                       )}
+
                     </CardBody>
                   )}
                 </CardFooter>
               </Card>
+
               <br />
               {data.year_details && (
                 <Card>
@@ -337,6 +400,7 @@ function Container() {
                   <SimilarityCountTable data={data} />
                 </Card>
               )}
+
             </Fragment>
           ) : (
             <Card>
