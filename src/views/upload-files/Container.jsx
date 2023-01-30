@@ -232,10 +232,7 @@ function Container() {
         return splitName;
       };
       const files = allFiles.filter(
-        (i) =>
-          selectedFiles.includes(i.id) &&
-          (extension(i.file_name) === "doc" ||
-            extension(i.file_name) === "docx")
+        (i) => selectedFiles.includes(i.id) && !i.is_error
       );
       const allYears = files.map((i) => yearFormat(i.created_at));
       const uniqueYear = [...new Set(allYears)];
