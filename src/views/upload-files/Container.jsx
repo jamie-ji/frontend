@@ -268,6 +268,7 @@ function Container() {
                         value={author}
                         onChange={(e) => {
                           setBtnProcess(false);
+                          setData({});
 
                           selectAuthorHandler(e);
                           setProcessing(false);
@@ -312,7 +313,13 @@ function Container() {
                       {fileUploadPercentage < 100 ? (
                         ""
                       ) : (
-                        <Alert color="danger"> Add more files</Alert>
+                        <Alert color="danger">
+                          {" "}
+                          {allFiles.length >= threshold.threshold &&
+                          selectedFiles.length < threshold.threshold
+                            ? "Select more files"
+                            : "Add more files"}
+                        </Alert>
                       )}
                     </CardBody>
                   )}

@@ -39,14 +39,13 @@ function UploadFileTable({
       <Table className="mb-0" responsive>
         <thead>
           <tr>
-            <th>
+            <th colSpan={2}>
               <Input
                 type="checkbox"
                 checked={selectedFiles.length === allFiles.length}
                 onChange={(e) => selectAll(e, selectedFiles)}
               />
             </th>
-            <th></th>
             <th>File</th>
             <th>Author</th>
             <th>Created at</th>
@@ -77,6 +76,7 @@ function UploadFileTable({
                 author.length &&
                 authorName.includes(item.author) &&
                 checked &&
+                selectedFiles.includes(item.id) &&
                 status ? (
                   <span>
                     {checked.includes(item.id) ? (
@@ -90,16 +90,18 @@ function UploadFileTable({
                 )}
               </td>
 
-              <td>
-                <FileIcon
-                  extension={item.full_url.split(".").pop()}
-                  {...defaultStyles[
-                    extensionStyle(item.full_url.split(".").pop())
-                  ]}
-                />{" "}
-                {item.file_name
-                  ? nameHandler(item.file_name.split("/")[1])
-                  : ""}{" "}
+              <td className="text-nowrap d-flex">
+                <p className="description_p">
+                  <FileIcon
+                    extension={item.full_url.split(".").pop()}
+                    {...defaultStyles[
+                      extensionStyle(item.full_url.split(".").pop())
+                    ]}
+                  />{" "}
+                  {item.file_name
+                    ? nameHandler(item.file_name.split("/")[1])
+                    : ""}
+                </p>
                 <Button
                   size="sm"
                   className="p-0 text-primary"
