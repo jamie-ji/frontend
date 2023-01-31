@@ -13,15 +13,15 @@ function SimilarityCountTable({ data }) {
           </tr>
         </thead>
         <tbody>
-          {data.year_details &&
-            data.year_details.map((item, index) => (
+          {data &&
+            data.map((item, index) => (
               <tr key={index}>
                 <td>{item ? item.year : "---"}</td>
                 <td>{item ? item.file_count : "---"}</td>
                 <td>{item ? item.word_count : "---"}</td>
               </tr>
             ))}
-          {data.year_details && (
+          {data && (
             <tr>
               <td>
                 <strong>Total:</strong>
@@ -29,18 +29,20 @@ function SimilarityCountTable({ data }) {
               <td>
                 <strong>
                   {" "}
-                  {[
-                    ...data.year_details.map((i) => parseInt(i.file_count)),
-                  ].reduce((a, b) => a + b, 0)}{" "}
+                  {[...data.map((i) => parseInt(i.file_count))].reduce(
+                    (a, b) => a + b,
+                    0
+                  )}{" "}
                 </strong>
               </td>
               <td>
                 {" "}
                 <strong>
                   {" "}
-                  {[
-                    ...data.year_details.map((i) => parseInt(i.word_count)),
-                  ].reduce((a, b) => a + b, 0)}{" "}
+                  {[...data.map((i) => parseInt(i.word_count))].reduce(
+                    (a, b) => a + b,
+                    0
+                  )}{" "}
                 </strong>
               </td>
             </tr>

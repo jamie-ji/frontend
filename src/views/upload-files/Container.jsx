@@ -23,6 +23,8 @@ import { baseUrl, deBugMode } from "../../@components/constants";
 import { forEveryKeyLoop } from "../../@components/loops";
 import toastify from "../../@components/toastify";
 import { AiOutlineInfoCircle } from "react-icons/ai";
+import { yearFormat } from "../../@components/date-management";
+import { ArrowUp } from "react-feather";
 
 function Container() {
   const [data, setData] = useState({}),
@@ -37,8 +39,8 @@ function Container() {
     [tester, setTester] = useState([]),
     [uploadedCount, setUploadedCount] = useState(0),
     [errCount, setErrCount] = useState(0),
+    [scrolled, setScrolled] = useState(0),
     [author, setAuthor] = useState([]);
-
 
   const authorName = author.map((i) => i.label);
 
@@ -66,8 +68,6 @@ function Container() {
   const allAuthors = allFiles.filter((i) => i.author).map((i) => i.author);
   const authors = [...new Set(allAuthors)].map((i) => ({ label: i, value: i }));
 
-
-
   const allAuthorName = authors.map((i) => i.label);
   const completedColor = (arg) => {
     if (arg >= 0 && arg <= 50) {
@@ -78,7 +78,6 @@ function Container() {
       return "success";
     }
   };
-
 
   const getTask = (id) => {
     axios
@@ -127,7 +126,6 @@ function Container() {
     }
   };
 
-
   const uploadFileHandler = (file) => {
     setUploading(true);
     setProcessing(false);
@@ -140,12 +138,10 @@ function Container() {
     axios
       .post(`${baseUrl}/documentchecker/file/`, form_data)
       .then((res) => {
-
         setAllFiles((c) => c.concat(res.data));
         setSelectedFiles((c) => c.concat(res.data.id));
 
         // setUploadedCount(uploadedCount + 1);
-
 
         setUploading(false);
 
@@ -212,6 +208,9 @@ function Container() {
 
   const checked = checkHandler();
 
+  const scrollHandler = () => {
+    setScrolled(window.scrollY);
+  };
 
   const getThreshold = () => {
     axios
@@ -220,61 +219,50 @@ function Container() {
         setThreshold(res.data);
       })
       .catch((e) => {});
-
   };
   useEffect(() => {
     getThreshold();
+    window.addEventListener("scroll", scrollHandler);
   }, []);
 
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     // getTask()
-  //     if (processing) {
-  //       getTask(taskId);
-  //     }
-  //   }, 1000 * 5);
-  //   return () => clearInterval(interval);
-  // }, [taskId, processing]);
-  const handleIdByAuthor = (arr) => {
-    let ids = [];
-    for (let i = 0; i < arr.length; i++) {
-      const newIds = allFiles.filter((c) => c.author === arr[i]);
-      const idArr = newIds.map((i) => i.id);
-      ids.push(...idArr);
-      // setSelectedFiles((c) => c.concat(idArr));
-    }
-    setSelectedFiles(ids);
-  };
-  const selectAuthorHandler = (e) => {
-    const authorList = e.filter((i) => i.label !== "All authors");
-    // setAuthor(authorList);
-    const allAuth = e.map((i) => i.label);
-    if (allAuth.includes("All authors")) {
-      setAuthor(authors);
-      handleIdByAuthor(allAuthorName);
-    } else {
-      setAuthor(e);
-      handleIdByAuthor(allAuth);
-    }
+  const getFileCount = () => {
+      const data = [];
+      const extension = (name) => {
+        const splitName = name.split(".").pop();
+        return splitName;
+      };
+      const files = allFiles.filter(
+        (i) => selectedFiles.includes(i.id) && !i.is_error
+      );
+      const allYears = files.map((i) => yearFormat(i.created_at));
+      const uniqueYear = [...new Set(allYears)];
+      for (let y of uniqueYear) {
+        const filteredYear = files.filter(
+          (i) => yearFormat(i.created_at) === y
+        );
+        const dict = {
+          year: y,
+          file_count: filteredYear.length,
+          word_count: [
+            ...filteredYear.map((i) => parseInt(i.word_count)),
+          ].reduce((a, b) => a + b, 0),
+        };
+        data.push(dict);
+      }
+      return data;
+    },
+    fileTableCount = getFileCount();
 
-    // if (checkType) {
-    //   console.log("false");
-    // } else {
-    //   console.log("true");
-    // }
-    // console.log(allAuth);
-  };
-  const getThreshold = () => {
-    axios
-      .get(`${baseUrl}/configurations/`)
-      .then((res) => {
-        setThreshold(res.data.threshold);
-        // console.log("thrushold", thrushold);
-      })
-      .catch((e) => {
-        console.log("e", e);
-      });
-  };
+  useEffect(() => {
+    const interval = setInterval(() => {
+      // getTask()
+      if (processing) {
+        getTask(taskId);
+      }
+    }, 1000 * 5);
+    return () => clearInterval(interval);
+  }, [taskId, processing]);
+
   useEffect(() => {
     // if (allFiles.length > 0 && allFiles.length === selectedFiles.length) {
     //   console.log("QQ");
@@ -285,6 +273,11 @@ function Container() {
   // console.log("trushold", thrushold);
   return (
     <Fragment>
+      {scrolled > 100 && (
+        <div className="scroll-top" onClick={() => window.scrollTo(0, 0)}>
+          <ArrowUp size={17} />
+        </div>
+      )}
       <div className="container my-5">
         <UILoader blocking={uploading}>
           <Card>
@@ -320,7 +313,7 @@ function Container() {
                     </Col>
 
                     <Col md="3">
-                      {/* <Select
+                      <Select
                         color="primary"
                         options={[{ label: "All authors" }, ...authors]}
                         value={author}
@@ -329,16 +322,13 @@ function Container() {
 
                           setData({});
 
-
                           selectAuthorHandler(e);
                           setProcessing(false);
                         }}
                         placeholder="Select Author"
                         components={{ Option: CustomOption }}
                         isMulti
-
-                      
-                      /> */}
+                      />
                     </Col>
                   </Row>
                 </CardHeader>
@@ -353,7 +343,6 @@ function Container() {
                   selectAll={selectAll}
                   status={btnComplete || data.status === "Complete"}
                 />
-
 
                 <CardFooter>
                   {fileUploadPercentage === 100 &&
@@ -382,14 +371,13 @@ function Container() {
                             : "Add more files"}
                         </Alert>
                       )}
-
                     </CardBody>
                   )}
                 </CardFooter>
               </Card>
 
               <br />
-              {data.year_details && (
+              {selectedFiles.length ? (
                 <Card>
                   <CardHeader className="pb-0">
                     <CardTitle tag={"h5"} className="m-0">
@@ -397,10 +385,15 @@ function Container() {
                     </CardTitle>
                   </CardHeader>
 
-                  <SimilarityCountTable data={data} />
+                  <SimilarityCountTable
+                    data={
+                      data.year_details ? data.year_details : fileTableCount
+                    }
+                  />
                 </Card>
+              ) : (
+                <Alert color="danger">No file selected</Alert>
               )}
-
             </Fragment>
           ) : (
             <Card>
