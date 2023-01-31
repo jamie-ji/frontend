@@ -1,6 +1,6 @@
 ## Required Versions
 
-node=`16.14.0`
+node=`16.14.0`\
 npm=`8.3.1`
 
 ## Available Scripts
@@ -21,7 +21,7 @@ You may also see any lint errors in the console.
 
 ### `npm run build`
 
-To change url add PUBLIC_URL at ".env"
+To add production url add `PUBLIC_URL` in `.env`
 
 Builds the app for production to the `build` folder.\
 It correctly bundles React in production mode and optimizes the build for the best performance.
