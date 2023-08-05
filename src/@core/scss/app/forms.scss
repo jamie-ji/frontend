@@ -1,0 +1,92 @@
+.input_merge_2 {
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  border: $border;
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  &.invalid {
+    border: 1px solid $danger !important;
+  }
+  &.valid {
+    border: 1px solid $success !important;
+  }
+  border-radius: 0.25rem;
+  &:focus {
+    &:first-child {
+      display: none !important;
+    }
+  }
+  .input-group-text,
+  .form-control {
+    border: none;
+    color: $text;
+  }
+  .form-control {
+    box-shadow: none !important;
+  }
+  .input-group-text {
+    padding-right: 5px !important;
+  }
+  .flatpickr-input {
+    border: none !important;
+    color: $text !important;
+    font-size: 14px;
+    padding: 0.375rem 0.75rem;
+  }
+  .css-1pahdxg-control {
+    border: none !important;
+    box-shadow: none !important;
+  }
+  .css-b62m3t-container {
+    border-color: $white !important;
+    background-color: red !important;
+    width: 90% !important;
+    &:focus {
+      box-shadow: none !important;
+    }
+  }
+  .css-1s2u09g-control {
+    border-color: $white !important;
+    border-width: 0 !important;
+  }
+}
+
+.flatpickr-months {
+  &::before {
+    display: none;
+  }
+  &::after {
+    display: none;
+  }
+}
+
+.form-text {
+  font-size: 12px;
+}
+
+.custom_input_checkbox {
+  // border: none !important;
+  height: 1.1rem !important;
+  width: 1.1rem !important;
+  cursor: pointer;
+  background: none !important;
+  border-color: $border-gray !important;
+  box-shadow: none !important;
+  &:hover {
+    box-shadow: $custom-shadow rgba($color: $primaryRgba, $alpha: 0.3) !important;
+  }
+  &.checked {
+    background-position: center !important;
+    background-size: cover !important;
+    background-color: red !important;
+    border-color: $primary;
+  }
+}
+
+.hidden_field {
+  display: none;
+}
+.input-group {
+  .css-b62m3t-container {
+    width: 80% !important;
+  }
+}

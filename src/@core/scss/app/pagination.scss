@@ -1,0 +1,34 @@
+.pagination {
+  .page-item {
+    display: flex;
+    align-items: center;
+    box-shadow: none !important;
+    border-radius: 50%;
+    .page-link {
+      color: $primary;
+      border: none !important;
+      border-radius: 50%;
+      box-shadow: none !important;
+      //   padding: 10px !important;
+    }
+    &.active {
+      .page-link {
+        box-shadow: none !important;
+        color: $white !important;
+        background: $primary;
+        border-color: $primary;
+        border-radius: 50%;
+        margin: 0 !important;
+        // padding: 10px !important;
+      }
+      //   color: $white !important;
+    }
+  }
+}
+
+.react-paginate {
+  //   background-color: aqua;
+  width: fit-content;
+  border: 1px solid $body-gray;
+  border-radius: 50px;
+}

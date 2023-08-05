@@ -1,0 +1,86 @@
+.table {
+  border-collapse: separate !important;
+  border-spacing: inherit;
+  color: $text;
+  margin-top: 1rem;
+  tbody {
+    tr {
+      &:first-child {
+        border-top: none !important;
+      }
+    }
+  }
+
+  td {
+    font-size: 14px;
+    white-space: nowrap;
+    &.action_cell {
+      text-align: right;
+      // display: flex;
+      // justify-content: flex-end;
+      position: sticky;
+      right: 0;
+      background: $white;
+      // border-left: 1px solid rgba($primaryRgba, 0.2);
+      .action_menu {
+        display: flex;
+        justify-content: flex-end;
+        background-color: rgba($text, 0.05);
+        padding: 0px 7px 5px 0px;
+        border-radius: 50px;
+      }
+    }
+    a {
+      color: $primary;
+      text-decoration: none;
+    }
+  }
+  th {
+    background: rgba($body-gray, 1);
+    text-transform: inherit;
+    border-width: 0;
+
+    &.action_cell {
+      position: sticky;
+      right: 100;
+      background-color: $body-gray;
+    }
+  }
+  thead {
+    background: rgba($body-gray, 1);
+    // box-shadow: inset 0px 4px 8px rgba($black, 0.1),
+    //   inset 0px -4px 8px rgba($black, 0.1);
+  }
+}
+.modal_content {
+  th {
+    background-color: $white !important;
+  }
+}
+
+table {
+  width: 100%;
+  th,
+  td {
+    white-space: nowrap;
+    svg {
+      width: 15px;
+    }
+  }
+}
+
+.table_cell_min_width {
+  min-width: 250px;
+}
+
+.compact_table {
+  td {
+    padding: 0 5px;
+  }
+}
+.compact_table_header {
+  th,
+  td {
+    padding: 0 5px;
+  }
+}

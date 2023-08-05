@@ -1,0 +1,49 @@
+.setting_menu_container {
+  height: 100%;
+  border-right: 3px solid $body-gray;
+  .setting_link {
+    display: flex;
+    padding: 10px 15px;
+    align-items: center;
+    color: $text;
+    text-decoration: none;
+    transition: 0.25s linear;
+    white-space: nowrap;
+    position: relative;
+    right: -3px;
+    width: 100%;
+
+    overflow: hidden !important;
+    text-overflow: ellipsis;
+    // padding-right: 10px;
+    &.active_subroute {
+      border-right: 3px solid $primary;
+      //   border-color: $primary;
+    }
+    // box-shadow: $box-shadow inset;
+    &:hover {
+      color: $text;
+    }
+  }
+}
+
+.link_holder {
+  // display: flex;
+  white-space: nowrap;
+  overflow: hidden !important;
+  text-overflow: ellipsis;
+  // background-color: red;
+  width: 100%;
+}
+
+.setting_icon {
+  width: 70%;
+  aspect-ratio: 1/1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 5px dotted $primary;
+  border-radius: 50%;
+  color: $primary;
+  margin: 0 auto;
+}

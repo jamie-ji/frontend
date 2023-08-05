@@ -1,0 +1,66 @@
+.css-1pahdxg-control {
+  border: 1px solid $primary;
+  box-shadow: $box-shadow !important;
+  &:hover {
+    border: 1px solid $primary;
+  }
+}
+.css-1okebmr-indicatorSeparator {
+  background: none !important;
+}
+
+.select_option {
+  &:hover {
+    background-color: rgba($primaryRgba, $alpha: 0.1);
+    color: $primary;
+    cursor: pointer;
+  }
+}
+
+.option--is-selected {
+  background-color: red !important;
+}
+
+.css-qc6sy-singleValue {
+  color: $text !important;
+}
+
+.react_select_invalid {
+  .css-1s2u09g-control {
+    border-color: $danger !important;
+  }
+}
+
+.css-9gakcf-option {
+  background-color: $white !important;
+  color: $primary;
+}
+.css-1n7v3ny-option {
+  background-color: rgba($primaryRgba, 0.1) !important;
+  color: $primary;
+}
+
+.css-1rhbuit-multiValue {
+  background: $primary;
+  color: $white !important;
+  border-radius: 0.25rem !important;
+  .select__multi-value__label {
+    color: $white !important;
+    font-size: 12px !important;
+  }
+}
+
+.border-danger {
+  .css-1s2u09g-control {
+    border-color: $danger !important;
+  }
+}
+
+.css-t3ipsp-control {
+  border-color: $appPrimary !important;
+  box-shadow: none !important;
+}
+
+.css-1u9des2-indicatorSeparator {
+  display: none !important;
+}

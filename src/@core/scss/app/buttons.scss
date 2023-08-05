@@ -1,0 +1,113 @@
+.btn-primary {
+  background: $primary;
+  border-color: $primary;
+  outline: none !important;
+  box-shadow: none !important;
+  &:disabled {
+    background: $primary;
+  }
+
+  &:hover {
+    box-shadow: $btn-shadow rgba($primaryRgba, 0.3) !important;
+    background-color: $primaryDark;
+    border-color: $primaryDark;
+  }
+  &.btn_outline {
+    background-color: transparent !important;
+    color: $primary;
+    border: 2px solid $primary;
+  }
+  &:focus {
+    border-color: $primaryDark;
+    background-color: $primaryDark;
+  }
+  &.btn_group_margin {
+    margin-right: 3px;
+  }
+  &.gradient {
+    background: linear-gradient(
+      155deg,
+      rgba($primaryRgba, 1),
+      rgba($primaryRgba, 0.6)
+    ) !important;
+  }
+}
+.btn {
+  outline: none !important;
+  box-shadow: none !important;
+  transition: 0.25s linear;
+  margin: 0 0.25rem;
+}
+
+.btn-icon,
+.MuiIconButton-root {
+  background-color: rgba($white, 1) !important;
+  color: $text;
+  border-radius: 50% !important;
+  aspect-ratio: 1/1;
+  padding: 5px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: $box-shadow !important;
+  &:hover {
+    background-color: $white;
+    color: $text;
+  }
+}
+.btn-secondary {
+  margin: 0 4px;
+  &:disabled {
+    background: $secondary !important;
+    color: $white;
+  }
+}
+// .btn-outline-secondary {
+//   &:hover {
+//     background: $white !important;
+//     color: $secondary;
+//   }
+// }
+// .btn-outline-danger {
+//   &:hover {
+//     background: $white !important;
+//     color: $danger;
+//   }
+// }
+
+.btn-group {
+  .btn {
+    margin-left: 1px !important;
+  }
+  .btn-primary {
+    &:disabled {
+      background: $primary;
+    }
+  }
+}
+
+.btn-outline-primary {
+  // margin: 0 4px;
+  border-color: $primary;
+  color: $primary;
+  &:hover {
+    background: $primary;
+    color: $white !important;
+  }
+}
+.search_btn {
+  margin: 0;
+  padding: 0.25rem 0.75rem !important;
+  display: flex;
+  align-items: center;
+  .icon {
+    width: 25px;
+    text-align: left;
+  }
+}
+
+.btn-outline-flat-primary,
+.btn-flat-primary {
+  background: rgba($primaryRgba, 0.05) !important;
+  color: $primary;
+}
