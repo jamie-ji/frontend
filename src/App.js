@@ -6,6 +6,8 @@ import { BrowserRouter as Router,
 
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
+import UploadPage from './pages/UploadPage';
+
 import Header from './components/Header';
 
 import PrivateRoutes from './utils/PrivateRoutes';
@@ -21,6 +23,7 @@ function App() {
                 <Routes>
                     <Route element={<PrivateRoutes />}>
                         <Route element={<HomePage />} path="/" exact/>
+                        <Route element={<UploadPage />} path="/upload"/>
                     </Route>
                     <Route element={<LoginPage />} path="/login"/>
                 </Routes>

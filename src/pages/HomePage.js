@@ -29,19 +29,19 @@ const Homepage = () => {
 
     }
 
-
     return (
         <div>
-            <p>You are logged to the home page! </p>
+            <div>
+                <p>You are logged to the home page! </p>
 
-            <p>Here is the list of all the documents:</p> 
+                <p>Here is the list of all the documents:</p> 
 
-            <ul>
-                {documents.map((document) => {
-                    return <li key={document.id}>{document.body}</li>
-                })}
-            </ul>
-
+                <ul>
+                    {documents.map((document) => {
+                        return <li key={document.id}>{document.body}</li>
+                    })}
+                </ul>
+            </div>
         </div>
     )
 }
