@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react'
 import AuthContext from '../context/AuthContext'
+import { ErrorAnalysisLineChart,data,options } from '../components/ErrorAnalysisLineChart';
 
 const Homepage = () => {
     let [documents, setDocuments] = useState([]);
@@ -41,6 +42,9 @@ const Homepage = () => {
                         return <li key={document.id}>{document.body}</li>
                     })}
                 </ul>
+            </div>
+            <div style={{ width: '500px', height: '300px' }}>
+            <ErrorAnalysisLineChart data={data} options={options} /> {/* Pass data and options here */}
             </div>
         </div>
     )
