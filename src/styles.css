@@ -1,0 +1,103 @@
+/* * {
+    box-sizing: border-box;
+}
+body {
+    margin: 0
+}
+
+.nav {
+    background-color: #333;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+    padding: 0 1rem;
+}
+
+.site-title {
+    font-size: 2rem;
+}
+
+.nav ul{
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    display: flex;
+    gap: 1rem;
+}
+.nav a {
+    color:inherit;
+    text-decoration: none;
+    height: 100%;
+    align-items: center;
+    padding: .25rem;
+}
+.nav li.active{
+    background-color: #555;
+}
+.nav li:hover{
+    background-color: #777;
+} */
+
+/* Add a black background color to the top navigation */
+.topnav {
+    background-color: #333;
+    overflow: hidden;
+  }
+  
+  /* Style the links inside the navigation bar */
+  .topnav a {
+    float: left;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+  }
+  
+  /* Change the color of links on hover */
+  .topnav a:hover {
+    background-color: #ddd;
+    color: black;
+  }
+  
+  /* Add a color to the active/current link */
+  .topnav a.active {
+    background-color: #0e9ece;
+    color: white;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  }
+
+  .sidebar {
+    position: absolute;
+    top: 60px;
+    left: -15vw;
+    height: 100%;
+    width: 15vw;
+    transition: left 0.3s ease-in-out;
+    background-color: lightgray;
+  }
+  .sidebar-toggle {
+    position: absolute;
+    top: 20%;
+    right: -60px;
+    height: 60px;
+    width: 60px;
+    z-index: 1;
+  }
+  .content {
+    position: absolute;
+    top: 60px;
+    left: 0;
+    right: 0;
+    height: 100%;
+    transition: left 0.3s ease-in-out;
+    background-color: lightgray;
+  }
+  .sidebar.open {
+    left: 0;
+  }
+  .content.open {
+    left: 15vw;
+  }
