@@ -1,49 +1,20 @@
-/* * {
+* {
     box-sizing: border-box;
-}
-body {
-    margin: 0
-}
+  }
 
-.nav {
-    background-color: #333;
-    color: white;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 2rem;
-    padding: 0 1rem;
-}
-
-.site-title {
-    font-size: 2rem;
-}
-
-.nav ul{
-    padding: 0;
-    margin: 0;
-    list-style: none;
-    display: flex;
-    gap: 1rem;
-}
-.nav a {
-    color:inherit;
-    text-decoration: none;
+  html, body {
+    background-color:aliceblue;
     height: 100%;
-    align-items: center;
-    padding: .25rem;
-}
-.nav li.active{
-    background-color: #555;
-}
-.nav li:hover{
-    background-color: #777;
-} */
+    margin: 0;
+    padding: 0;
+  }
 
 /* Add a black background color to the top navigation */
 .topnav {
     background-color: #333;
     overflow: hidden;
+    margin-left: 0;
+    margin-right: 0;
   }
   
   /* Style the links inside the navigation bar */
@@ -69,7 +40,7 @@ body {
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   }
 
-  .sidebar {
+  /* .sidebar {
     position: absolute;
     top: 60px;
     left: -15vw;
@@ -100,4 +71,59 @@ body {
   }
   .content.open {
     left: 15vw;
+  } */
+
+.sidemenu {
+    width: 25%;
+    background-color: rgb(255, 255, 255);
+    height: 100%;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    text-align: center;
+}
+
+.content {
+    width: 75%;
+}
+
+.column {
+    float: left;
+    padding: 0px;
+    height: 100%;
   }
+
+  #footer {
+    position:fixed;
+    left:0px;
+    bottom:0px;
+    height:50px;
+    width:100%;
+    background:#999;
+ }
+
+  header h1 {
+    font-size: 50px;
+    font-weight: 600;
+    background-image: linear-gradient(to left, #553c9a, #b393d3);
+    color: transparent;
+    background-clip: text;
+    -webkit-background-clip: text;
+    }
+  
+.contentheader{
+    background-color: #2196F3;
+  color: white;
+  text-align: center;
+  padding: 15px;
+  height: 100px;
+}
+
+.button1{
+    background-color: #008CBA;
+    position:fixed;
+    left:350px;
+    bottom:90px;
+    height:90px;
+    width: 150px;
+}
+
