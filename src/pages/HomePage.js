@@ -43,7 +43,7 @@ const Homepage = () => {
                     })}
                 </ul>
             </div>
-            <div style={{ width: '500px', height: '300px' }}>
+            <div style={{ width: '1500px', height: '500px' }}>
             <ErrorAnalysisLineChart data={data} options={options} /> {/* Pass data and options here */}
             </div>
         </div>
