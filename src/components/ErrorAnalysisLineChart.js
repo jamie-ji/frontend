@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -19,76 +19,103 @@ ChartJS.register(
     LineElement,
     Title,
     Tooltip,
-    Legend
+    Legend,
   );
 
-  export const options = {
-    responsive: true,
-    plugins: {
-      title: {
-        display: true,
-        text: 'Writing Accuracy',
-        align: 'start',
-        font: {
-          size: 40,
-          weight: 'bold',
-          //lineHeight: 1.2,
-        },
-        //padding: {top: 20, left: 0, right: 0, bottom: 0}
-      },
-      subtitle: {
-        display: true,
-        text: '1,154,902 words',
-        align: 'end',
-        font: {
-          size: 36,
-          weight: 'bold',
-          lineHeight: 1.2,
-        },
-        padding: {top: 20, left: 0, right: 0, bottom: 0}
-      },
-      lenged: {
-        labels:{
-          boxHeight: 2
-        },
-      },
-    },
-  };
-
-const labels = ['2022-2', '2022-3', '2022-4', '2022-5', '2022-6', '2022-7', '2022-8','2022-9','2022-10','2022-11','2022-12','2023-1'];
-
-export const data = {
-  labels,
-  datasets: [
-    {
-      label: 'Grammar',
-      data: [147,
-        115,
-        200,
-        150,
-        150,
-        145,
-        190,
-        175,
-        130,
-        210,
-        190,
-        250],
-      borderColor: 'rgb(30,144,255)',
-      backgroundColor: 'rgb(30,144,255)',
-      lineTension: 0.3
-    },
-    /*
-   {
-      label: 'Grammar',
-      data: [9,6,6,8,3,4,6],
-      borderColor: 'rgb(53, 162, 235)',
-      backgroundColor: 'rgba(53, 162, 235, 0.5)',
-    },
-    */
-  ],
-};
- 
-export function ErrorAnalysisLineChart() {
-    return <Line options={options} data={data} />;
+function ErrorAnalysisChart({chartData}) {
+  if (!chartData || chartData.length === 0) {
+    return null;
   }
+
+  function getRandomColor() {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  }
+const lineTension = 0.3;
+//const labels = chartData.map((item) => item.timestamp);
+const labels = [...new Set(chartData.map((item) => item.timestamp))];
+const datasets = [];
+//const errorTypes = chartData.map((item) => item.errorType);
+const errorTypes = [...new Set(chartData.map((item) => item.errorType))];
+
+errorTypes.forEach((errorType) => {
+  const filteredData = chartData.filter((item) => item.errorType === errorType);
+  const dataset = {
+    label: errorType,
+    data: filteredData.map((item) => item.errorCount),
+    boarderColor: getRandomColor(),
+    backgroundColor: 'rgba(0,0,0,0)',
+    lineTension: lineTension,
+  };
+  datasets.push(dataset);
+})
+
+//console.log(labels)
+//console.log(datasets)
+
+
+// const borderColor = ['rgb(30,144,255)'];
+// const backgroundColor = ['rgb(30,144,255)'];
+
+const data = {
+  labels: labels,
+  datasets: datasets,
+}
+
+const options = {
+  responsive: true,
+  plugins: {
+    title: {
+      display: true,
+      text: 'Writing Accuracy',
+      align: 'start',
+      font: {
+        size: 40,
+        weight: 'bold',
+        //lineHeight: 1.2,
+      },
+      //padding: {top: 20, left: 0, right: 0, bottom: 0}
+    },
+    subtitle: {
+      display: true,
+      text: '1,154,902 words',
+      align: 'end',
+      font: {
+        size: 36,
+        weight: 'bold',
+        lineHeight: 1.2,
+      },
+      padding: {top: 20, left: 0, right: 0, bottom: 0}
+    },
+    legend: {
+      labels:{
+        boxHeight: 2
+      },
+    },
+  },
+  // scales:{
+  //   x:{
+  //     type: 'time',
+  //     time:{
+  //       unit: 'month'
+  //     },
+  //     min: '2022-01',
+  //     max: '2023-02',
+  //   },
+  //   y:{
+  //     beginAtZero: true},
+  // },
+};
+
+  return(
+    <div>
+     <Line options={options} data={data} />;
+    </div>
+    )
+  }
+
+  export default ErrorAnalysisChart;
