@@ -5,10 +5,14 @@ import { Link } from 'react-router-dom';
 
 const Homepage = () => {
     let [documents, setDocuments] = useState([]);
+    let [user, setUser] = useState([]);
     let { authTokens, logoutUser } = useContext(AuthContext);
 
     useEffect(() => {
-        getDocuments(); 
+        getDocuments();
+    }, []);
+    useEffect(() => {
+        getUser();
     }, []);
 
     let getDocuments = async () => {
@@ -31,6 +35,26 @@ const Homepage = () => {
 
     }
 
+    let getUser = async () => {
+        let response = await fetch('http://localhost:8000/api/user/', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${String(authTokens.access)}`
+            }
+        })
+
+        let data = await response.json()
+
+        if (response.status === 200) {
+            setUser(data)
+        } else {
+            console.log('Error getting user! ')
+            logoutUser()
+        }
+
+    }
+
     return (
         <body>
             <div class="column sidemenu">
@@ -40,16 +64,16 @@ const Homepage = () => {
                 <Avatar name="Alan Biju" size={150} round={true} />
                 <div>
                 <br/>
-                <text><b>Username:</b> alan</text>
+                <text><b>Username:</b> {user.username}</text>
                 <br/>
                 <br/>
-                <text><b>First Name:</b> Alan</text>
+                <text><b>First Name:</b> {user.first_name}</text>
                 <br/>
                 <br/>
-                <text><b>Last Name:</b> Biju</text>
+                <text><b>Last Name:</b> {user.last_name}</text>
                 <br/>
                 <br/>
-                <text><b>Email:</b> altalanbiju@gmail.com</text>
+                <text><b>Email:</b> {user.email}</text>
                 <br/>
                 </div>
             </div>
