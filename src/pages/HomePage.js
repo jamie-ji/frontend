@@ -2,11 +2,15 @@ import React, { useState, useEffect, useContext } from 'react'
 import AuthContext from '../context/AuthContext'
 import Avatar from 'react-avatar';
 import { Link } from 'react-router-dom';
+import FilterData from '../components/FilterData';
+import DrawChart from '../components/DrawChart';
+
 
 const Homepage = () => {
     let [documents, setDocuments] = useState([]);
     let [user, setUser] = useState([]);
     let { authTokens, logoutUser } = useContext(AuthContext);
+    let [filteredData, setFilteredData] = useState([]);
 
     useEffect(() => {
         getDocuments();
@@ -55,8 +59,94 @@ const Homepage = () => {
 
     }
 
+       //Dummy Data 
+       const documentErrorStat = [
+        {
+          "timestamp": "2022-10",
+          "errorType": "All Errors",
+          "errorCount": 100
+        },
+        {
+          "timestamp": "2022-10",
+          "errorType": "Syntax Error",
+          "errorCount": 20
+        },
+        {
+          "timestamp": "2022-10",
+          "errorType": "Spelling Error",
+          "errorCount": 10
+        },
+        {
+            "timestamp": "2022-11",
+            "errorType": "All Errors",
+            "errorCount": 60
+          },
+          {
+            "timestamp": "2022-11",
+            "errorType": "Syntax Error",
+            "errorCount": 40
+          },
+          {
+            "timestamp": "2022-11",
+            "errorType": "Spelling Error",
+            "errorCount": 20
+          },
+        {
+          "timestamp": "2022-12",
+          "errorType": "All Errors",
+          "errorCount": 120
+        },
+        {
+          "timestamp": "2022-12",
+          "errorType": "Syntax Error",
+          "errorCount": 25
+        },
+        {
+          "timestamp": "2022-12",
+          "errorType": "Spelling Error",
+          "errorCount": 15
+        },
+        {
+            "timestamp": "2023-01",
+            "errorType": "All Errors",
+            "errorCount": 30
+        },
+        {
+            "timestamp": "2023-01",
+            "errorType": "Syntax Error",
+            "errorCount": 25
+        },
+        {
+            "timestamp": "2023-01",
+            "errorType": "Spelling Error",
+            "errorCount": 5
+        },
+          {
+            "timestamp": "2023-02",
+            "errorType": "All Errors",
+            "errorCount": 45
+          },
+          {
+            "timestamp": "2023-02",
+            "errorType": "Syntax Error",
+            "errorCount": 35
+          },
+          {
+            "timestamp": "2023-02",
+            "errorType": "Spelling Error",
+            "errorCount": 10
+          },
+      ]
+    
+    const handleDataFiltered = (data) =>{
+        setFilteredData(data);
+    };
+
+
+
     return (
         <body>
+            
             <div class="column sidemenu">
                 <header>
                     <h1>Your Details</h1> 
@@ -89,12 +179,21 @@ const Homepage = () => {
                         return <li key={document.id}>{document.filename}</li>
                     })}
                 </ul>
+
+                <div style={{ width: '800px', height: '30px' }}>
+                <FilterData onDataFiltered={handleDataFiltered} initialData={documentErrorStat}/>
+                </div>
+                <div style={{ width: '900px', height: '300px' }}>
+                <DrawChart chartData={filteredData}/> {/* Pass data and options here */}
+                </div>
+
                 <Link to="/upload">
                     <button class="button1">
                         <p>Upload more files</p>
                     </button>
                 </Link>
             </div>
+            
             <footer id="footer"></footer>
         </body>
     )
