@@ -1,4 +1,6 @@
 import './App.css';
+import "./styles.css";
+import "./CollapsibleSideMenu.css";
 
 import { BrowserRouter as Router, 
     Route, 
@@ -9,10 +11,12 @@ import LoginPage from './pages/LoginPage';
 import UploadPage from './pages/UploadPage';
 
 import Header from './components/Header';
+import Slider from './components/Slider';
 
 import PrivateRoutes from './utils/PrivateRoutes';
 
 import { AuthProvider } from './context/AuthContext';
+import CollapsibleSideMenu from './components/CollapsibleSideMenu';
 
 function App() {
     return (

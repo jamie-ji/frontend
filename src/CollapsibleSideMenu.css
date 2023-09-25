@@ -1,0 +1,30 @@
+.side-menu {
+    width: 250px;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: -250px; /* Start offscreen */
+    transition: left 0.3s ease;
+    background-color: #333;
+    color: white;
+  }
+  
+  .side-menu.open {
+    left: 0; /* Slide in when open */
+  }
+  
+  .menu-toggle-button {
+    background-color: transparent;
+    border: none;
+    color: white;
+    cursor: pointer;
+  }
+  
+  .menu-items {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .menu-items li {
+    padding: 10px;
+  }
