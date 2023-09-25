@@ -1,0 +1,37 @@
+/* Header.css */
+.header-container {
+    display: flex;
+    align-items: center;
+    background-color: #007bff;
+    padding: 10px;
+    color: #fff;
+}
+
+.nav-link {
+    text-decoration: none;
+    color: #fff;
+}
+
+.nav-button {
+    background-color: transparent;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    font-size: 16px;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-button:hover {
+    text-decoration: underline;
+}
+
+.nav-separator {
+    color: #fff;
+    margin: 0 10px;
+}
+
+.user-greeting {
+    margin-left: auto;
+    font-weight: bold;
+}
