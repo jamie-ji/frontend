@@ -6,20 +6,18 @@ const FileUpload = () => {
   const [uploadedFiles, setUploadedFiles] = useState([]);
   
   const onDrop = async (acceptedFiles) => {
-    const formData = new FormData();
-    acceptedFiles.forEach(file => {
+    
+    acceptedFiles.forEach(async file => {
+      const formData = new FormData();
       formData.append('file', file);
+      try {
+        const response = await axios.post('http://localhost:8000/api/upload/', formData);
+        console.log('Files uploaded successfully', response.data);
+        setUploadedFiles(prevState => [...prevState, file])
+      } catch (error) {
+        console.error('Error uploading files', error);
+      }
     });
-
-    try {
-      const response = await axios.post('http://localhost:8000/api/upload/', formData);
-      console.log('Files uploaded successfully', response.data);
-      acceptedFiles.forEach(file => {
-        setUploadedFiles(prevState => [...prevState, file]);
-      });
-    } catch (error) {
-      console.error('Error uploading files', error);
-    }
   };
 
   const { getRootProps, getInputProps } = useDropzone({ onDrop });
