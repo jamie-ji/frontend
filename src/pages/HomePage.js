@@ -10,6 +10,7 @@ const Homepage = () => {
     let [documents, setDocuments] = useState([]);
     let [user, setUser] = useState([]);
     let { authTokens, logoutUser } = useContext(AuthContext);
+    let [chartData, setChartData] = useState([]);
     let [filteredData, setFilteredData] = useState([]);
 
     useEffect(() => {
@@ -17,6 +18,9 @@ const Homepage = () => {
     }, []);
     useEffect(() => {
         getUser();
+    }, []);
+    useEffect(() => {
+        getChartInfo();
     }, []);
 
     let getDocuments = async () => {
@@ -32,6 +36,26 @@ const Homepage = () => {
 
         if (response.status === 200) {
             setDocuments(data)
+        } else {
+            console.log('Error getting documents! ')
+            logoutUser()
+        }
+
+    }
+
+    let getChartInfo = async () => {
+        let response = await fetch('http://localhost:8000/api/errors/chart', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${String(authTokens.access)}`
+            }
+        })
+
+        let data = await response.json()
+
+        if (response.status === 200) {
+            setChartData(data)
         } else {
             console.log('Error getting documents! ')
             logoutUser()
@@ -141,7 +165,6 @@ const Homepage = () => {
     const handleDataFiltered = (data) =>{
         setFilteredData(data);
     };
-
 
 
     return (
