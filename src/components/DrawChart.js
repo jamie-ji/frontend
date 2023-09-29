@@ -35,6 +35,21 @@ function DrawChart({chartData}) {
     }
     return color;
   }
+
+  const fixedColors = [
+    'rgb(255, 99, 132)',
+    'rgb(54, 162, 235)',
+    'rgb(255, 205, 86)',
+    'rgb(75, 192, 192)',
+    'rgb(153, 102, 255)',
+    'rgb(255, 159, 64)',
+    'rgb(255, 0, 0)',
+    'rgb(0, 255, 0)',
+    'rgb(0, 0, 255)',
+    'rgb(128, 0, 128)',
+  ];
+
+
 const lineTension = 0.3;
 //const labels = chartData.map((item) => item.timestamp);
 const labels = [...new Set(chartData.map((item) => item.timestamp))];
@@ -42,12 +57,12 @@ const datasets = [];
 //const errorTypes = chartData.map((item) => item.errorType);
 const errorTypes = [...new Set(chartData.map((item) => item.errorType))];
 
-errorTypes.forEach((errorType) => {
+errorTypes.forEach((errorType, index) => {
   const filteredData = chartData.filter((item) => item.errorType === errorType);
   const dataset = {
     label: errorType,
     data: filteredData.map((item) => item.errorCount),
-    boarderColor: getRandomColor(),
+    borderColor: fixedColors[index],
     backgroundColor: 'rgba(0,0,0,0)',
     lineTension: lineTension,
   };
