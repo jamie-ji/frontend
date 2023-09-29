@@ -1,0 +1,12 @@
+.dropzone input {
+    display: none;
+}
+
+.dropzone {
+    /* display: none; */
+    min-height: 5rem;
+    min-width: 5rem;
+    border-radius: 0.2rem;
+    padding: 0.5rem;
+    background-color: aliceblue;
+}
