@@ -15,7 +15,7 @@ const FileUpload = () => {
       formData.append('file', file);
       try {
         const response = await axios.post('http://localhost:8000/api/upload/', formData, {headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'multipart/form-data',
           'Authorization': `Bearer ${String(authTokens.access)}`
       }});
         console.log('Files uploaded successfully', response.data);
