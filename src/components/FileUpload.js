@@ -3,7 +3,8 @@ import axios from 'axios';
 import { useDropzone } from 'react-dropzone';
 
 import AuthContext from '../context/AuthContext'
-
+import SortedDocumentErrors from "./SortedDocumentErrors";
+import SortedDocuments from "./SortedDocuments";
 const FileUpload = () => {
   const [uploadedFiles, setUploadedFiles] = useState([]);
   let { authTokens, logoutUser } = useContext(AuthContext);
@@ -39,6 +40,8 @@ const FileUpload = () => {
           <li key={index}>{file.name}</li>
         ))}
       </ul>
+      <SortedDocuments/>
+      <SortedDocumentErrors/>
     </div>
   );
 };
