@@ -22,6 +22,9 @@ const Homepage = () => {
     useEffect(() => {
         getChartInfo();
     }, []);
+    // useEffect(() => {
+    //     submit();
+    // }, []);
 
     let getDocuments = async () => {
         let response = await fetch('http://localhost:8000/api/documents/', {
@@ -55,6 +58,7 @@ const Homepage = () => {
         let data = await response.json()
 
         if (response.status === 200) {
+            console.log(data)
             setChartData(data)
         } else {
             console.log('Error getting documents! ')
@@ -80,7 +84,6 @@ const Homepage = () => {
             console.log('Error getting user! ')
             logoutUser()
         }
-
     }
 
        //Dummy Data 
@@ -166,6 +169,23 @@ const Homepage = () => {
         setFilteredData(data);
     };
 
+    // const submit = async () =>{
+    //     let response = await fetch('http://localhost:8000/api/submit', {
+    //         method: 'GET',
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //             'Authorization': `Bearer ${String(authTokens.access)}`
+    //         }
+    //     })
+    //     let data = await response.json()
+
+    //     if (response.status === 200) {
+    //         console.log('Submitted successfully! ')
+    //     } else {
+    //         console.log('Error when submitting! ')
+    //     }
+    // }
+
 
     return (
         <body>
@@ -203,8 +223,8 @@ const Homepage = () => {
                     })}
                 </ul>
 
-                <div style={{ width: '800px', height: '30px' }}>
-                <FilterData onDataFiltered={handleDataFiltered} initialData={documentErrorStat}/>
+                <div style={{ width: '800px', height: '80px' }}>
+                <FilterData onDataFiltered={handleDataFiltered} initialData={chartData}/>
                 </div>
                 <div style={{ width: '900px', height: '300px' }}>
                 <DrawChart chartData={filteredData}/> {/* Pass data and options here */}
@@ -215,6 +235,7 @@ const Homepage = () => {
                         <p>Upload more files</p>
                     </button>
                 </Link>
+
             </div>
             
             <footer id="footer"></footer>

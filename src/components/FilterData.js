@@ -6,6 +6,29 @@ function FilterData({ onDataFiltered, initialData }) {
   const [selectedTimeDimension, setSelectedTimeDimension] = useState('last12Months');
   const [selectedErrorTypes, setSelectedErrorTypes] = useState([]);
   
+  //Get time and year from chartdata
+  const timestamps = initialData.map((item) => item.timestamp);
+  const timeSelectOptions = timestamps.map((timestamp) => {
+    const year = timestamp.split('-')[0];
+    //console.log(year)
+    return(
+    <option key={year} value={year}>
+      {year}
+    </option>
+    );
+});
+
+  //Get error types from chartdata
+  const errorTypesSet = new Set();
+  initialData.forEach((item) => {
+    const errorTypes = Object.keys(item.all_errors);
+    errorTypes.forEach((errorType) => {
+      errorTypesSet.add(errorType);
+    });
+  });
+
+  const errorTypes = Array.from(errorTypesSet);
+  //console.log(errorTypes)
 
    // 根据用户选择的时间维度计算开始时间
    const calculateStartTime = (timeDimension) => {
@@ -37,7 +60,6 @@ function FilterData({ onDataFiltered, initialData }) {
   };
 
   useEffect(() => {
-    // 根据用户选择的时间维度和错误类型筛选数据
     const startTime = calculateStartTime(selectedTimeDimension);
     const endTime = calculateEndTime(selectedTimeDimension);
 
@@ -45,12 +67,13 @@ function FilterData({ onDataFiltered, initialData }) {
       return (
         item.timestamp >= startTime &&
         item.timestamp <= endTime &&
-        (selectedErrorTypes.includes('All Errors') || selectedErrorTypes.includes(item.errorType)|| selectedErrorTypes.length === 0)
+        (selectedErrorTypes.includes('All Errors') || errorTypes.includes(selectedErrorTypes)|| selectedErrorTypes.length === 0)
       );
     });
 
       // 根据选择的条件进行数据筛选
-    onDataFiltered(filteredData); // 将筛选后的数据传递给父组件或其他组件
+    onDataFiltered(filteredData);
+    console.log(filteredData) // 将筛选后的数据传递给父组件或其他组件
   }, [selectedTimeDimension, selectedErrorTypes]);
 
   return (
@@ -63,23 +86,28 @@ function FilterData({ onDataFiltered, initialData }) {
             onChange={(e) => setSelectedTimeDimension(e.target.value)}
             >
             <option value='last12Months'>Last 12 Months</option>
-            <option value="2023">2023</option>
-            <option value="2022">2022</option>
-            <option value="2021">2021</option>
-            { /* 添加选项，例如：最近12个月、2022年、2021年 */}
+             {timeSelectOptions}
             </select>
         </div>
         <div>
             <select
-            value={selectedErrorTypes}
-            onChange={(e) => setSelectedErrorTypes(Array.from(e.target.selectedOptions, (item) => item.value))}
+              multiple
+              value={selectedErrorTypes}
+              onChange={(e) =>
+                setSelectedErrorTypes(
+                  Array.from(e.target.selectedOptions, (item) => item.value)
+                )
+              }
             >
-            <option value="All Errors">All Errors</option>
-            <option value="Syntax Error">Syntax Error</option>
-            <option value="Spelling Error">Spelling Error</option>
-            {/* 添加其他错误类型选项 */}
+              <option value="All Errors">All Errors</option>
+              {errorTypes.map((errorType) => (
+                <option key={errorType} value={errorType}>
+                  {errorType}
+                </option>
+              ))}
             </select>
         </div>
+
     </div>
   );
 }
