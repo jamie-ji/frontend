@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import { useDropzone } from 'react-dropzone';
 
+import AuthContext from '../context/AuthContext'
+
 const FileUpload = () => {
   const [uploadedFiles, setUploadedFiles] = useState([]);
+  let { authTokens, logoutUser } = useContext(AuthContext);
   
   const onDrop = async (acceptedFiles) => {
     
@@ -11,7 +14,10 @@ const FileUpload = () => {
       const formData = new FormData();
       formData.append('file', file);
       try {
-        const response = await axios.post('http://localhost:8000/api/upload/', formData);
+        const response = await axios.post('http://localhost:8000/api/upload/', formData, {headers: {
+          'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${String(authTokens.access)}`
+      }});
         console.log('Files uploaded successfully', response.data);
         setUploadedFiles(prevState => [...prevState, file])
       } catch (error) {
