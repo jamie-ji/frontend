@@ -12,6 +12,7 @@ const Homepage = () => {
     let { authTokens, logoutUser } = useContext(AuthContext);
     let [chartData, setChartData] = useState([]);
     let [filteredData, setFilteredData] = useState([]);
+    let [selectedErrorType, setSelectedErrorType] = useState(['All Errors']);
 
     useEffect(() => {
         getDocuments();
@@ -169,6 +170,10 @@ const Homepage = () => {
         setFilteredData(data);
     };
 
+    const handleSelectedErrorType = (selectedErrorType) =>{
+        setSelectedErrorType(selectedErrorType);
+    };
+
     // const submit = async () =>{
     //     let response = await fetch('http://localhost:8000/api/submit', {
     //         method: 'GET',
@@ -178,6 +183,7 @@ const Homepage = () => {
     //         }
     //     })
     //     let data = await response.json()
+    //     console.log(data)
 
     //     if (response.status === 200) {
     //         console.log('Submitted successfully! ')
@@ -223,11 +229,15 @@ const Homepage = () => {
                     })}
                 </ul>
 
-                <div style={{ width: '800px', height: '80px' }}>
-                <FilterData onDataFiltered={handleDataFiltered} initialData={chartData}/>
+                <div style={{ width: '800px', height: '30px' }}>
+                <FilterData onDataFiltered={handleDataFiltered} 
+                            onSelectedErrorType={handleSelectedErrorType}
+                            initialData={chartData}
+                            />
                 </div>
                 <div style={{ width: '900px', height: '300px' }}>
-                <DrawChart chartData={filteredData}/> {/* Pass data and options here */}
+                <DrawChart chartData={filteredData}
+                            selectedErrorType={selectedErrorType}/> {/* Pass data and options here */}
                 </div>
 
                 <Link to="/upload">
