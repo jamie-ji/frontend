@@ -1,35 +1,106 @@
 import React, { useState, useEffect } from 'react';
 import { DateTime } from 'luxon';
 
-function FilterData({ onDataFiltered, initialData }) {
+function FilterData({ onDataFiltered, onSelectedErrorType, initialData }) {
   //const [data, setData] = useState([]);
-  const [selectedTimeDimension, setSelectedTimeDimension] = useState('last12Months');
-  const [selectedErrorTypes, setSelectedErrorTypes] = useState([]);
-  
-  //Get time and year from chartdata
-  const timestamps = initialData.map((item) => item.timestamp);
-  const timeSelectOptions = timestamps.map((timestamp) => {
-    const year = timestamp.split('-')[0];
-    //console.log(year)
-    return(
-    <option key={year} value={year}>
-      {year}
-    </option>
-    );
-});
+  const [selectedTimeDimension, setSelectedTimeDimension] = useState('2023');
+  const [selectedErrorType, setSelectedErrorType] = useState('All Errors');
 
-  //Get error types from chartdata
-  const errorTypesSet = new Set();
+  const yearToErrorMap = new Map();
+
   initialData.forEach((item) => {
-    const errorTypes = Object.keys(item.all_errors);
-    errorTypes.forEach((errorType) => {
-      errorTypesSet.add(errorType);
-    });
-  });
+    const yearValue = item.timestamp.split('-')[0];
+    const monthValue = item.timestamp;
 
-  const errorTypes = Array.from(errorTypesSet);
-  //console.log(errorTypes)
+    //if current year already have information
+    if(yearToErrorMap.has(yearValue)){
+      //errortypes is an array with specific years all error information
+      let errorTypes = yearToErrorMap.get(yearValue);
 
+      //iterate all_errors from current month's information
+      for(const error of Object.keys(item.all_errors)) {
+        //if this errorType already exsit in this year
+        if(errorTypes.has(error)){
+          //add this month's count
+          const errorType = errorTypes.get(error);
+          errorType.set(monthValue,item.all_errors[error]);
+        }else{
+          //create a new errorType and add it to array
+          const errorType = new Map();
+          errorType.set(monthValue,item.all_errors[error]);
+          errorTypes.set(error,errorType);
+        }
+      }
+      //update year's errors information in map
+      yearToErrorMap.set(yearValue,errorTypes)
+    }else{
+      //create a new errortypes array
+      const errorTypes = new Map();
+      //iterate all_errors from current month and add it to array
+      for(const error of Object.keys(item.all_errors)) {
+        const errorType = new Map();
+        errorType.set(monthValue, item.all_errors[error]);
+        errorTypes.set(error, errorType);
+      }
+      //add this year's errors information to map
+      yearToErrorMap.set(yearValue, errorTypes)
+    }
+  })
+
+  const sortedYearOptions = Array.from( yearToErrorMap.keys() ).sort((a, b) => b - a);
+  const yearErrorOptions = new Map();
+  yearToErrorMap.forEach((errorTypes,year) =>{
+    //console.log(errorTypes)
+    const errorOptions = Array.from( errorTypes.keys() ).sort((a, b) => b - a);
+    yearErrorOptions.set(year,errorOptions)
+    //console.log(yearErrorOptions)
+  })
+
+   
+  // const yearToMonthMap = new Map();
+  // const yearErrorOptions = new Map();
+
+  // initialData.forEach((item) => {
+  //   const yearValue = item.timestamp.split('-')[0];
+  //   const monthValue = item.timestamp;
+
+  //   const monthErrorAll = new Map();
+  //   const monthErrorDetails = new Map();
+  //   for(const error of Object.keys(item.all_errors)) {
+  //     monthErrorDetails.set(error,item.all_errors[error])
+  //   }
+  //   monthErrorAll.set(monthValue,monthErrorDetails);
+
+  //   if(yearToMonthMap.hasOwnProperty(yearValue)){
+  //       const monthData = yearToMonthMap.get(yearValue);
+  //       const updatedMonthData = monthData.add(monthErrorAll);
+  //       yearToMonthMap.set(yearValue,updatedMonthData);
+  //   }else{
+  //       const monthData = [];
+  //       monthData.push(monthErrorAll);
+  //       yearToMonthMap.set(yearValue,monthData);
+  //     }
+
+  //   if(yearErrorOptions.hasOwnProperty(yearValue)){
+  //       const errorOptions = yearToMonthMap.get(yearValue);
+  //       const updatedErrorOptions = errorOptions.add(monthErrorDetails.keys());
+  //       yearToMonthMap.set(yearValue,updatedErrorOptions);
+  //   }else{
+  //       const errorOptions = new Set();      
+  //       errorOptions.add(monthErrorDetails.keys())
+  //       yearErrorOptions.set(yearValue,errorOptions);
+  //     }
+  // });
+
+  //const sortedYearOptions = Array.from( yearToMonthMap.keys() ).sort((a, b) => b - a);
+  //console.log(sortedYearOptions)
+
+  // yearErrorOptions.forEach((year, errorOptions) => {
+  //   const sortedErrorOptions = Array.from(errorOptions).sort((a, b) => b - a);
+  //   yearErrorOptions.set(year, new Set(sortedErrorOptions));
+  // });
+
+/*
    // 根据用户选择的时间维度计算开始时间
    const calculateStartTime = (timeDimension) => {
     const currentDate = DateTime.now();
@@ -38,10 +109,6 @@ function FilterData({ onDataFiltered, initialData }) {
     if (timeDimension === 'last12Months') {
         startTime = currentDate.minus({ months: 12 });
     } else {
-        // console.log(timeDimension)
-        // console.log(typeof timeDimension);
-        // const selectedYear = parseInt(timeDimension);
-        // console.log(typeof selectedYear);
         startTime = DateTime.fromObject({year: parseInt(timeDimension)-1, month: 12, day: 31});
     }
 
@@ -58,58 +125,57 @@ function FilterData({ onDataFiltered, initialData }) {
     }
     return endTime.toISODate();
   };
+  */
 
   useEffect(() => {
-    const startTime = calculateStartTime(selectedTimeDimension);
-    const endTime = calculateEndTime(selectedTimeDimension);
+    //const startTime = calculateStartTime(selectedTimeDimension);
+    //const endTime = calculateEndTime(selectedTimeDimension);
+    let yearData = yearToErrorMap.get(selectedTimeDimension)
+    console.log(yearToErrorMap)
+    console.log(yearData)
+    let filteredData = yearData;
+    if(selectedErrorType !== 'All Errors'){
+      filteredData = yearData.get(selectedErrorType);
+      console.log(filteredData)
+    }
+    if (filteredData) {
+      onDataFiltered(filteredData);
+      onSelectedErrorType(selectedErrorType);
+    } 
 
-    const filteredData = initialData.filter((item) => {
-      return (
-        item.timestamp >= startTime &&
-        item.timestamp <= endTime &&
-        (selectedErrorTypes.includes('All Errors') || errorTypes.includes(selectedErrorTypes)|| selectedErrorTypes.length === 0)
-      );
-    });
+  }, [selectedTimeDimension, selectedErrorType]);
 
-      // 根据选择的条件进行数据筛选
-    onDataFiltered(filteredData);
-    console.log(filteredData) // 将筛选后的数据传递给父组件或其他组件
-  }, [selectedTimeDimension, selectedErrorTypes]);
-
-  return (
-    // 用户选择时间维度和错误类型的 UI 元素
+return (
+  <div>
     <div>
-        <div>
-        {/* 添加时间维度选择的下拉菜单 */}
-            <select
-            value={selectedTimeDimension}
-            onChange={(e) => setSelectedTimeDimension(e.target.value)}
-            >
-            <option value='last12Months'>Last 12 Months</option>
-             {timeSelectOptions}
-            </select>
-        </div>
-        <div>
-            <select
-              multiple
-              value={selectedErrorTypes}
-              onChange={(e) =>
-                setSelectedErrorTypes(
-                  Array.from(e.target.selectedOptions, (item) => item.value)
-                )
-              }
-            >
-              <option value="All Errors">All Errors</option>
-              {errorTypes.map((errorType) => (
-                <option key={errorType} value={errorType}>
-                  {errorType}
-                </option>
-              ))}
-            </select>
-        </div>
-
+      <select
+        value={selectedTimeDimension}
+        onChange={(e) => setSelectedTimeDimension(e.target.value)}
+      >
+        {sortedYearOptions.map((year) => (
+          <option key={year} value={year}>
+            {year}
+          </option>
+        ))}
+      </select>
     </div>
-  );
+    <div>
+    <select
+        value={selectedErrorType}
+        onChange={(e) => setSelectedErrorType(e.target.value)}
+      >
+        <option value="All Errors">All Errors</option>
+        {yearErrorOptions.has(selectedTimeDimension) &&
+          yearErrorOptions.get(selectedTimeDimension).map((errorType) => (
+            <option key={errorType} value={errorType}>
+              {errorType}
+            </option>
+          ))}
+      </select>
+    </div>
+  </div>
+);
+
 }
 
 export default FilterData;
