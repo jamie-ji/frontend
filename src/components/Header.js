@@ -22,6 +22,7 @@ const Header = () => {
             <Link class="active" to="/">Penwell</Link>
             <Link to="/upload">Upload</Link>
             {user ? (<Link onClick={logoutUser}>Logout</Link>) : (<Link to="/login">Login</Link>)}
+            <Link to="/upload">My Files</Link>
         </div>
         // <div>
         //     <Link to="/"><button>Home</button></Link>
