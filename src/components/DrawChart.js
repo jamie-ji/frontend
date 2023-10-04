@@ -22,37 +22,135 @@ ChartJS.register(
     Legend,
   );
 
-function DrawChart({chartData}) {
-  if (!chartData || chartData.length === 0) {
-    return null;
-  }
+function DrawChart({chartData, selectedErrorType}) {
+  // if (!chartData || chartData.length === 0) {
+  //   return null;
+  // }
+  //console.log(chartData)
+  //console.log(selectedErrorType)
 
-  function getRandomColor() {
-    const letters = '0123456789ABCDEF';
-    let color = '#';
-    for (let i = 0; i < 6; i++) {
-      color += letters[Math.floor(Math.random() * 16)];
+  const colors = [
+    'rgb(255, 99, 132)',
+    'rgb(54, 162, 235)',
+    'rgb(255, 205, 86)',
+    'rgb(75, 192, 192)',
+    'rgb(153, 102, 255)',
+    'rgb(255, 159, 64)',
+    'rgb(255, 0, 0)',
+    'rgb(0, 255, 0)',
+    'rgb(0, 0, 255)',
+    'rgb(128, 0, 128)',
+  ];
+
+  const lineTension = 0.3;
+  let labels = [];
+  const dataPoints = [];
+  let datasets = [];
+  console.log(selectedErrorType)
+
+  if(selectedErrorType !== 'All Errors'){
+    chartData.forEach((count, month)=>{
+      labels.push(month);
+      dataPoints.push(count);
+      });
+      datasets = [
+          {
+            label: selectedErrorType,
+            data: dataPoints,
+            borderColor: colors[0],
+            backgroundColor: 'rgba(0,0,0,0)',
+          }
+        ];
+    }else{
+    const labelsSet = new Set();
+    chartData.forEach((errorDetails, errorType) =>{
+      const errorTypeDataPoints = [];
+      errorDetails.forEach((count,month) =>{
+        labelsSet.add(month)
+        errorTypeDataPoints.push(count);
+      });
+      const colorIndex = datasets.length % colors.length;
+      datasets.push({
+          label: errorType, 
+          data: errorTypeDataPoints,
+          borderColor: colors[colorIndex], 
+          backgroundColor: 'rgba(0,0,0,0)', 
+          lineTension: lineTension
+        });
+      });
+
+      labels = Array.from(labelsSet).sort((a, b) => {
+        return a.localeCompare(b);
+      });
     }
-    return color;
-  }
-const lineTension = 0.3;
-//const labels = chartData.map((item) => item.timestamp);
-const labels = [...new Set(chartData.map((item) => item.timestamp))];
-const datasets = [];
-//const errorTypes = chartData.map((item) => item.errorType);
-const errorTypes = [...new Set(chartData.map((item) => item.errorType))];
+  
+    const chartInfo = {
+        labels: labels,
+        datasets: datasets,
+      }
 
-errorTypes.forEach((errorType) => {
-  const filteredData = chartData.filter((item) => item.errorType === errorType);
-  const dataset = {
-    label: errorType,
-    data: filteredData.map((item) => item.errorCount),
-    boarderColor: getRandomColor(),
-    backgroundColor: 'rgba(0,0,0,0)',
-    lineTension: lineTension,
-  };
-  datasets.push(dataset);
-})
+    console.log(chartInfo)
+
+// const lineTension = 0.3;
+// const errorCountsMap = {};
+
+//   // 遍历 chartData 并汇总错误类型计数
+//   chartData.forEach((dataItem, index) => {
+//     const errorCounts = dataItem.all_errors;
+
+//     for (const errorType in errorCounts) {
+//       if (errorCounts.hasOwnProperty(errorType)) {
+//         if (!errorCountsMap[errorType]) {
+//           errorCountsMap[errorType] = {
+//             label: errorType, // 使用错误类型作为标签
+//             data: [], // 数据点
+//             borderColor: colors[index], // 选择颜色
+//             backgroundColor: 'rgba(0,0,0,0)',
+//             lineTension: lineTension,
+//           };
+//         }
+//         errorCountsMap[errorType].data.push(errorCounts[errorType]);
+//       }
+//     }
+//   });
+
+//   // 将汇总后的数据转换为 datasets 数组
+//   const datasets = Object.values(errorCountsMap);
+
+//   const data = {
+//     labels: chartData.map((item) => item.timestamp),
+//     datasets: datasets,
+//   };
+
+// const filteredData = chartData;
+// const datasets = [];
+
+
+// filteredData.forEach((filteredData) => {
+//   const errorCounts = filteredData.all_errors;
+//   console.log(errorCounts)
+//   for (const errorType in errorCounts) {
+//     if (errorCounts.hasOwnProperty(errorType)) {
+//       if (!errorCountsMap[errorType]) {
+//         errorCountsMap[errorType] = 0;
+//       }
+//       errorCountsMap[errorType] += errorCounts[errorType];
+//     }
+//   }
+// });
+
+// for (const errorType in errorCountsMap) {
+//   if (errorCountsMap.hasOwnProperty(errorType)) {
+//     const dataset = {
+//       label: errorType,        // 使用错误类型作为标签
+//       data: errorCountsMap[errorType], // 使用汇总后的统计数据作为数据
+//       borderColor: 'rgb(255, 99, 132)', // 你可以自定义边框颜色
+//       backgroundColor: 'rgba(0,0,0,0)',
+//       lineTension: lineTension,
+//     };
+//     datasets.push(dataset);
+//   }
+// }
 
 //console.log(labels)
 //console.log(datasets)
@@ -61,10 +159,10 @@ errorTypes.forEach((errorType) => {
 // const borderColor = ['rgb(30,144,255)'];
 // const backgroundColor = ['rgb(30,144,255)'];
 
-const data = {
-  labels: labels,
-  datasets: datasets,
-}
+// const data = {
+//   labels: Object.keys(errorCountsMap),
+//   datasets: datasets,
+// }
 
 const options = {
   responsive: true,
@@ -76,20 +174,7 @@ const options = {
       font: {
         size: 40,
         weight: 'bold',
-        //lineHeight: 1.2,
       },
-      //padding: {top: 20, left: 0, right: 0, bottom: 0}
-    },
-    subtitle: {
-      display: true,
-      text: '1,154,902 words',
-      align: 'end',
-      font: {
-        size: 36,
-        weight: 'bold',
-        lineHeight: 1.2,
-      },
-      padding: {top: 20, left: 0, right: 0, bottom: 0}
     },
     legend: {
       labels:{
@@ -97,23 +182,11 @@ const options = {
       },
     },
   },
-  // scales:{
-  //   x:{
-  //     type: 'time',
-  //     time:{
-  //       unit: 'month'
-  //     },
-  //     min: '2022-01',
-  //     max: '2023-02',
-  //   },
-  //   y:{
-  //     beginAtZero: true},
-  // },
 };
 
   return(
     <div>
-     <Line options={options} data={data} />;
+     <Line options={options} data={chartInfo} />;
     </div>
     )
   }

@@ -11,7 +11,9 @@ const Homepage = () => {
     let [documents, setDocuments] = useState([]);
     let [user, setUser] = useState([]);
     let { authTokens, logoutUser } = useContext(AuthContext);
+    let [chartData, setChartData] = useState([]);
     let [filteredData, setFilteredData] = useState([]);
+    let [selectedErrorType, setSelectedErrorType] = useState(['All Errors']);
 
     useEffect(() => {
         getDocuments();
@@ -19,6 +21,12 @@ const Homepage = () => {
     useEffect(() => {
         getUser();
     }, []);
+    useEffect(() => {
+        getChartInfo();
+    }, []);
+    // useEffect(() => {
+    //     submit();
+    // }, []);
 
     let getDocuments = async () => {
         let response = await fetch('http://localhost:8000/api/documents/', {
@@ -33,6 +41,27 @@ const Homepage = () => {
 
         if (response.status === 200) {
             setDocuments(data)
+        } else {
+            console.log('Error getting documents! ')
+            logoutUser()
+        }
+
+    }
+
+    let getChartInfo = async () => {
+        let response = await fetch('http://localhost:8000/api/errors/chart', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${String(authTokens.access)}`
+            }
+        })
+
+        let data = await response.json()
+
+        if (response.status === 200) {
+            console.log(data)
+            setChartData(data)
         } else {
             console.log('Error getting documents! ')
             logoutUser()
@@ -57,7 +86,6 @@ const Homepage = () => {
             console.log('Error getting user! ')
             logoutUser()
         }
-
     }
 
        //Dummy Data 
@@ -143,6 +171,27 @@ const Homepage = () => {
         setFilteredData(data);
     };
 
+    const handleSelectedErrorType = (selectedErrorType) =>{
+        setSelectedErrorType(selectedErrorType);
+    };
+
+    // const submit = async () =>{
+    //     let response = await fetch('http://localhost:8000/api/submit', {
+    //         method: 'GET',
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //             'Authorization': `Bearer ${String(authTokens.access)}`
+    //         }
+    //     })
+    //     let data = await response.json()
+    //     console.log(data)
+
+    //     if (response.status === 200) {
+    //         console.log('Submitted successfully! ')
+    //     } else {
+    //         console.log('Error when submitting! ')
+    //     }
+    // }
 
 
     return (
@@ -193,12 +242,22 @@ const Homepage = () => {
                     </tr>
                 </table>
 
-                <div style={{ width: '800px', height: '30px', marginTop: '30px' }}>
-                <FilterData onDataFiltered={handleDataFiltered} initialData={documentErrorStat}/>
+                <div style={{ width: '800px', height: '30px' }}>
+                <FilterData onDataFiltered={handleDataFiltered} 
+                            onSelectedErrorType={handleSelectedErrorType}
+                            initialData={chartData}
+                            />
                 </div>
-                <div style={{ width: '900px', height: '500px' }}>
-                <DrawChart chartData={filteredData}/> {/* Pass data and options here */}
+                <div style={{ width: '900px', height: '300px' }}>
+                <DrawChart chartData={filteredData}
+                            selectedErrorType={selectedErrorType}/> {/* Pass data and options here */}
                 </div>
+
+                <Link to="/upload">
+                    <button class="button1">
+                        <p>Upload more files</p>
+                    </button>
+                </Link>
             </div>
             
             <footer id="footer">

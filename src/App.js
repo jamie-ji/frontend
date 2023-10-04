@@ -16,7 +16,9 @@ import Slider from './components/Slider';
 import PrivateRoutes from './utils/PrivateRoutes';
 
 import { AuthProvider } from './context/AuthContext';
+import FileUpload from './components/FileUpload';
 import CollapsibleSideMenu from './components/CollapsibleSideMenu';
+
 
 function App() {
     return (
@@ -27,7 +29,7 @@ function App() {
                 <Routes>
                     <Route element={<PrivateRoutes />}>
                         <Route element={<HomePage />} path="/" exact/>
-                        <Route element={<UploadPage />} path="/upload"/>
+                        <Route element={<FileUpload />} path="/upload"/>
                     </Route>
                     <Route element={<LoginPage />} path="/login"/>
                 </Routes>
