@@ -235,11 +235,9 @@ const Homepage = () => {
                         <td>Filename</td>
                         <td>Author</td>
                     </tr>
-                    <tr>
                     {documents.map((document) => {
-                        return <Fragment><td>{document.filename}</td><td>{document.author}</td></Fragment>
+                        return <Fragment><tr><td>{document.filename}</td><td>{document.author}</td></tr></Fragment>
                     })}
-                    </tr>
                 </table>
 
                 <div style={{ width: '800px', height: '30px' }}>
@@ -248,16 +246,10 @@ const Homepage = () => {
                             initialData={chartData}
                             />
                 </div>
-                <div style={{ width: '900px', height: '300px' }}>
+                <div style={{ width: '900px', height: '500px' }}>
                 <DrawChart chartData={filteredData}
                             selectedErrorType={selectedErrorType}/> {/* Pass data and options here */}
                 </div>
-
-                <Link to="/upload">
-                    <button class="button1">
-                        <p>Upload more files</p>
-                    </button>
-                </Link>
             </div>
             
             <footer id="footer">
