@@ -30,7 +30,7 @@ const Header = () => {
                     <button className="nav-button">Signup</button>
                 </Link>
             )}
-            <span className="nav-separator"> | </span>
+            
             {user ? (
                 <Link to="/upload" className="nav-link">
                     <button className="nav-button">Upload</button>

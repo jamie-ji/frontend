@@ -30,7 +30,10 @@
     border-radius: 5px;
     outline: none;
 }
-
+.img{
+    height: 100px;
+    margin-bottom: 50px;
+}
 .register-button {
     margin-top: 30px;
     width: 150px;
@@ -45,3 +48,13 @@
 .register-button:hover {
     background-color: #0056b3;
 }
+/* Add styles for error messages */
+.error {
+    color: red;
+    margin-top: 5px;
+  }
+  
+  /* Add styles to indicate invalid inputs */
+  .register-input.error {
+    border: 1px solid red;
+  }
