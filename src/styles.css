@@ -76,20 +76,20 @@
 .sidemenu {
     width: 25%;
     background-color: rgb(255, 255, 255);
-    height: 100%;
+    min-height: 125vh;
     padding-top: 0px;
     padding-bottom: 0px;
     text-align: center;
 }
 
 .content {
-    width: 75%;
+    width: 72%;
+    margin-left: 3%;
 }
 
 .column {
     float: left;
     padding: 0px;
-    height: 100%;
   }
 
   #footer {
@@ -99,6 +99,8 @@
     height:50px;
     width:100%;
     background:#999;
+    text-align: center;
+
  }
 
   header h1 {
@@ -120,10 +122,12 @@
 
 .button1{
     background-color: #008CBA;
-    position:fixed;
-    left:350px;
-    bottom:90px;
+    margin-top: 20px;
     height:90px;
     width: 150px;
 }
 
+table, th, td {
+  border: 1px solid;
+  margin-bottom: 30px;
+}
