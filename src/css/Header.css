@@ -1,0 +1,45 @@
+/* Header.css */
+.header-container {
+    display: flex;
+    align-items: center;
+    height: 60px;
+    background-color: #fff;
+    padding: 10px;
+    color: #fff;
+    justify-content: space-between;
+}
+.left-container{
+    padding: 10px;
+}
+.logo {
+    height: 100%; 
+    display: flex; 
+    align-items: center; 
+}
+.right-container{
+    height: 60px;
+}
+
+.nav-link {
+    text-decoration: none;
+    color: #fff;
+}
+
+.nav-button {
+    background-color: transparent;
+    border: none;
+    color: black;
+    cursor: pointer;
+    font-size: 16px;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-button:hover {
+    text-decoration: underline;
+}
+
+.nav-separator {
+    color: black;
+    margin: 0 10px;
+}

@@ -1,39 +1,51 @@
 import React, {useContext} from 'react'
 import { Link } from 'react-router-dom'
 import AuthContext from '../context/AuthContext'
+import '../css/Header.css'
+import logo from '../static/logo.jpg'
 
 const Header = () => {
     let {user, logoutUser} = useContext(AuthContext)
     return (
-        // <nav classname="nav">
-        //     <Link to="/" classname="site-title">
-        //         Penwell
-        //     </Link>
-        //     <ul>
-        //         <li>
-        //             <Link to="/upload">Upload</Link>
-        //         </li>
-        //         <li>
-        //             <Link to="/logout">Logout</Link>
-        //         </li>
-        //     </ul>
-        // </nav>
-        <div class="topnav">
-            <Link class="active" to="/">Penwell</Link>
-            <Link to="/upload">Upload</Link>
-            {user ? (<Link onClick={logoutUser}>Logout</Link>) : (<Link to="/login">Login</Link>)}
-            <Link to="/upload">My Files</Link>
+        <div className="header-container">
+            <div className='left-container'>
+            <Link to="/" className="nav-link">
+                <button className="nav-button">Home</button>
+            </Link>
+            <span className="nav-separator"> | </span>
+            {user ? (
+                <button className="nav-button" onClick={logoutUser}>
+                    Logout
+                </button>
+            ) : (
+                <Link to="/login" className="nav-link">
+                    <button className="nav-button">Login</button>
+                </Link>
+            )}
+            <span className="nav-separator"> | </span>
+            {user ? (
+               ''
+            ) : (
+                <Link to="/register" className="nav-link">
+                    <button className="nav-button">Signup</button>
+                </Link>
+            )}
+            
+            {user ? (
+                <Link to="/upload" className="nav-link">
+                    <button className="nav-button">Upload</button>
+                </Link>
+            ) : (
+                ''
+            )}
+            </div>
+
+            <div className='right-container'>
+                <img className='logo' src={logo} alt="Logo" />
+            </div>
+
+            {/* {user && <p className="user-greeting">Hello {user.username}!</p>} */}
         </div>
-        // <div>
-        //     <Link to="/"><button>Home</button></Link>
-        //     <span> | </span>
-        //     {user ? (<button onClick={logoutUser}>Logout</button>) : (<Link to="/login"><button>Login</button></Link>)}
-        //     <span> | </span>
-        //     {user ? (<Link to="/upload"><button>Upload</button></Link>) : ''}
-            
-        //     {user && <p>Hello {user.username}!</p>}
-            
-        // </div>
     )
 }
 

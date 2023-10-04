@@ -1,0 +1,60 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    
+}
+.img{
+    height: 100px;
+    margin-bottom: 50px;
+}
+.login-header {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.register-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.register-input {
+    width: 300px;
+    height: 40px;
+    margin: 10px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+}
+.img{
+    height: 100px;
+    margin-bottom: 50px;
+}
+.register-button {
+    margin-top: 30px;
+    width: 150px;
+    height: 40px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.register-button:hover {
+    background-color: #0056b3;
+}
+/* Add styles for error messages */
+.error {
+    color: red;
+    margin-top: 5px;
+  }
+  
+  /* Add styles to indicate invalid inputs */
+  .register-input.error {
+    border: 1px solid red;
+  }
