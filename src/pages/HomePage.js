@@ -252,12 +252,6 @@ const Homepage = () => {
                 <DrawChart chartData={filteredData}
                             selectedErrorType={selectedErrorType}/> {/* Pass data and options here */}
                 </div>
-
-                <Link to="/upload">
-                    <button class="button1">
-                        <p>Upload more files</p>
-                    </button>
-                </Link>
             </div>
             
             <footer id="footer">
