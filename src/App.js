@@ -9,7 +9,7 @@ import { BrowserRouter as Router,
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import UploadPage from './pages/UploadPage';
-
+import Register from './pages/RegisterPage';
 import Header from './components/Header';
 import Slider from './components/Slider';
 
@@ -17,6 +17,7 @@ import PrivateRoutes from './utils/PrivateRoutes';
 
 import { AuthProvider } from './context/AuthContext';
 import CollapsibleSideMenu from './components/CollapsibleSideMenu';
+import RegisterPage from './pages/RegisterPage';
 
 function App() {
     return (
@@ -30,6 +31,7 @@ function App() {
                         <Route element={<UploadPage />} path="/upload"/>
                     </Route>
                     <Route element={<LoginPage />} path="/login"/>
+                    <Route element={<RegisterPage />} path="/register"/>
                 </Routes>
                 </AuthProvider>
             </Router>

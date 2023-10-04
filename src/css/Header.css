@@ -2,9 +2,22 @@
 .header-container {
     display: flex;
     align-items: center;
-    background-color: #007bff;
+    height: 60px;
+    background-color: #fff;
     padding: 10px;
     color: #fff;
+    justify-content: space-between;
+}
+.left-container{
+    padding: 10px;
+}
+.logo {
+    height: 100%; 
+    display: flex; 
+    align-items: center; 
+}
+.right-container{
+    height: 60px;
 }
 
 .nav-link {
@@ -15,7 +28,7 @@
 .nav-button {
     background-color: transparent;
     border: none;
-    color: #fff;
+    color: black;
     cursor: pointer;
     font-size: 16px;
     margin: 0;
@@ -27,11 +40,6 @@
 }
 
 .nav-separator {
-    color: #fff;
+    color: black;
     margin: 0 10px;
-}
-
-.user-greeting {
-    margin-left: auto;
-    font-weight: bold;
 }
