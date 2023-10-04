@@ -18,7 +18,7 @@ export const AuthProvider = ({ children }) => {
 
     let loginUser = async(e) => {
         e.preventDefault()
-        // console.log('Form submitted! ')
+         console.log('Form submitted! ')
 
         let response = await fetch('http://localhost:8000/api/token/', {
             method: 'POST',
@@ -44,6 +44,28 @@ export const AuthProvider = ({ children }) => {
             console.log('Login failed! ')
         }
     }
+    let RegisterUser=async(e)=>{
+        e.preventDefault()
+        console.log('Form submitted! ')
+        console.log(e.target)
+        let response = await fetch('http://localhost:8000/api/registration/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({'username': e.target.username.value,'email':e.target.email.value ,'first_name':e.target.first_name.value,'last_name':e.target.last_name.value,'password': e.target.password.value})
+        })
+        let data = await response.json()
+        if (response.status === 201) {
+           
+            navigate('/login')
+        } else {
+            alert('Register failed! ')
+            console.log('Register failed! ')
+        }
+    }
+
+
 
     let logoutUser = () => {
         setAuthTokens(null)
@@ -81,8 +103,9 @@ export const AuthProvider = ({ children }) => {
         authTokens: authTokens,
         loginUser: loginUser, 
         logoutUser: logoutUser, 
+        RegisterUser:RegisterUser,
     }
-
+    
     useEffect(() => {
 
         if (loading) {
@@ -98,7 +121,7 @@ export const AuthProvider = ({ children }) => {
         }, interval_time)
 
         return () => clearInterval(interval)
-
+    // eslint-disable-next-line
     }, [authTokens, loading])
 
     return(
