@@ -2,12 +2,13 @@ import { createContext, useState, useEffect } from 'react'
 import jwt_decode from "jwt-decode"
 import { useNavigate } from 'react-router-dom'
 
+
 const AuthContext = createContext()
 
 export default AuthContext
 
 export const AuthProvider = ({ children }) => {
-
+    
     let checkedTokens = localStorage.getItem('authTokens') ? JSON.parse(localStorage.getItem('authTokens')) : null 
 
     let [loading, setLoading] = useState(true)
@@ -45,22 +46,23 @@ export const AuthProvider = ({ children }) => {
         }
     }
     let RegisterUser=async(e)=>{
-        e.preventDefault()
+        
         console.log('Form submitted! ')
-        console.log(e.target)
+        
         let response = await fetch('http://localhost:8000/api/registration/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({'username': e.target.username.value,'email':e.target.email.value ,'first_name':e.target.first_name.value,'last_name':e.target.last_name.value,'password': e.target.password.value})
+            body: JSON.stringify({'username': e.username,'email':e.email ,'first_name':e.first_name,'last_name':e.last_name,'password': e.password})
         })
+       
         let data = await response.json()
         if (response.status === 201) {
-           
+            alert('Code has been sent to your email')
             navigate('/login')
         } else {
-            alert('Register failed! ')
+            alert('Username or email been used! Try another ones.')
             console.log('Register failed! ')
         }
     }

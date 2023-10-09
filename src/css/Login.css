@@ -3,7 +3,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100vh;
+    height: 80vh;
     
 }
 .img{
@@ -32,7 +32,7 @@
 }
 
 .login-button {
-    margin-top: 30px;
+    margin-top: 20px;
     width: 150px;
     height: 40px;
     background-color: #007bff;
@@ -44,4 +44,18 @@
 
 .login-button:hover {
     background-color: #0056b3;
+}
+.reg-link{
+    margin-top: 20px;
+}
+.reg-button{
+    font-style: italic;
+    text-decoration: underline;
+    background-color: transparent;
+    border: none;
+    color: black;
+    cursor: pointer;
+    font-size: 16px;
+    margin: 0;
+    padding: 0;
 }

@@ -19,7 +19,7 @@ import { AuthProvider } from './context/AuthContext';
 import FileUpload from './components/FileUpload';
 import CollapsibleSideMenu from './components/CollapsibleSideMenu';
 import RegisterPage from './pages/RegisterPage';
-
+import RegisterValidPage from './pages/RegisterValid';
 
 function App() {
     return (
@@ -34,6 +34,7 @@ function App() {
                     </Route>
                     <Route element={<LoginPage />} path="/login"/>
                     <Route element={<RegisterPage />} path="/register"/>
+                    <Route element={<RegisterValidPage />} path="/valid"/>
                 </Routes>
                 </AuthProvider>
             </Router>
