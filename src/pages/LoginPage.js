@@ -12,11 +12,12 @@ const LoginPage = () => {
             <form className="login-form" onSubmit={loginUser}>
                 <input className="login-input" type="text" name="username" placeholder="Username" />
                 <input className="login-input" type="password" name="password" placeholder="Password" />
-                <Link to="/register" className="nav-link">
-                    <button className="nav-button">New to Penwell?</button>
-                </Link>
+                
 
                 <button className="login-button" type="submit">Login</button>
+                <Link to="/register" className="reg-link">
+                    <button className="reg-button">New to Penwell?</button>
+                </Link>
             </form>
         </div>
     )
