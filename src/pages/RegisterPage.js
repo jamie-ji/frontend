@@ -2,9 +2,11 @@ import React, { useContext,useState } from 'react'
 import AuthContext from '../context/AuthContext'
 import '../css/Register.css'
 import logo from '../static/pic1.jpg'
+import Notification from './Notification'
 const RegisterPage = () => {
     
     let { RegisterUser } = useContext(AuthContext)
+    const [isProcessing,setIsProcessing]=useState(false);
     const [formData, setFormData] = useState({
         username: '',
         email: '',
@@ -24,17 +26,23 @@ const RegisterPage = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        
         if (formData.password !== formData.confirmPassword) {
             alert("Passwords do not match.");
         } else {
             RegisterUser(formData);
+            setIsProcessing(true);
+            setTimeout(() => {
+                setIsProcessing(false)
+            }, 3000);
         }
     };
     return (
       
       <div className="register-container">
+            <Notification isProcessing={isProcessing} />
             <img className='img' src={logo} alt="Logo" />
-
+            
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
                     <input
@@ -102,7 +110,7 @@ const RegisterPage = () => {
                         onChange={handleChange}
                     />
                 </div>
-                <button type="submit" className="btn btn-primary">Register</button>
+                <button type="submit" className="btn btn-primary" onClick={handleSubmit}>Register</button>
             </form>
             <div className="advertising-text">
                 <p>Sign up now and enjoy flawless writing.</p>

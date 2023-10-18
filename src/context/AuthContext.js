@@ -1,7 +1,7 @@
 import { createContext, useState, useEffect } from 'react'
 import jwt_decode from "jwt-decode"
 import { useNavigate } from 'react-router-dom'
-
+import Notification from '../pages/Notification'
 
 const AuthContext = createContext()
 
@@ -56,17 +56,23 @@ export const AuthProvider = ({ children }) => {
             },
             body: JSON.stringify({'username': e.username,'email':e.email ,'first_name':e.first_name,'last_name':e.last_name,'password': e.password})
         })
-       
+        
         let data = await response.json()
         if (response.status === 201) {
-            alert('Code has been sent to your email')
-            navigate('/login')
+            alert('Validation Code has been sent to your email')
+            navigate('/valid')
         } else {
             alert('Username or email been used! Try another ones.')
             console.log('Register failed! ')
         }
     }
 
+    let Validation=async(e)=>{
+
+        
+
+
+    }
 
 
     let logoutUser = () => {
